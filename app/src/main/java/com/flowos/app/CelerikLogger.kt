@@ -1,0 +1,36 @@
+package com.flowos.app
+
+import com.flowos.base.interfaces.Logger
+import timber.log.Timber
+import javax.inject.Inject
+
+class FlowOSLogger @Inject constructor(tree: Timber.Tree) : Logger {
+
+  init {
+    Timber.plant(tree)
+  }
+
+  override fun v(message: String, throwable: Throwable?) {
+    Timber.v(throwable, message)
+  }
+
+  override fun d(message: String, throwable: Throwable?) {
+    Timber.d(throwable, message)
+  }
+
+  override fun i(message: String, throwable: Throwable?) {
+    Timber.i(throwable, message)
+  }
+
+  override fun w(message: String, throwable: Throwable?) {
+    Timber.w(throwable, message)
+  }
+
+  override fun e(message: String, throwable: Throwable?) {
+    Timber.e(throwable, message)
+  }
+
+  override fun http(url: String, method: String, request: String?, response: String?, statusCode: Int?) {
+    Timber.d("$method: $url, $request\n$response\n$statusCode")
+  }
+}
