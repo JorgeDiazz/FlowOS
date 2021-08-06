@@ -1,7 +1,7 @@
 package com.flowos.app.di.modules
 
-import com.flowos.core.network.ServerInterceptor
 import com.flowos.app.network.NetworkConnectivityInterceptor
+import com.flowos.core.network.ServerInterceptor
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoSet

@@ -8,13 +8,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.flowos.base.interfaces.Logger
-import com.flowos.base.others.ONE_SECOND_IN_MILLISECONDS
-import com.flowos.core.EventObserver
 import com.flowos.app.data.SplashNews
 import com.flowos.app.databinding.ActivitySplashBinding
 import com.flowos.app.viewModels.SplashViewModel
+import com.flowos.base.interfaces.Logger
+import com.flowos.base.others.ONE_SECOND_IN_MILLISECONDS
 import com.flowos.components.utils.viewBinding
+import com.flowos.core.EventObserver
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.AndroidInjection
 import javax.inject.Inject

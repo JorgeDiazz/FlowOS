@@ -3,9 +3,9 @@ package com.flowos.app.di.modules
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.ViewModelProvider
-import com.flowos.core.interfaces.AppResources
 import com.flowos.app.data.FlowOSResources
 import com.flowos.app.di.ViewModelFactory
+import com.flowos.core.interfaces.AppResources
 import dagger.Binds
 import dagger.Module
 

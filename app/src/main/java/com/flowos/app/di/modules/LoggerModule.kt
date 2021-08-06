@@ -1,8 +1,8 @@
 package com.flowos.app.di.modules
 
-import com.flowos.base.interfaces.Logger
 import com.flowos.app.FlowOSDebugTree
 import com.flowos.app.FlowOSLogger
+import com.flowos.base.interfaces.Logger
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

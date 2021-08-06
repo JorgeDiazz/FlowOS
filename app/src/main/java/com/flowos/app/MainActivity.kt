@@ -2,8 +2,8 @@ package com.flowos.app
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.flowos.base.interfaces.Logger
 import com.flowos.app.databinding.ActivityMainBinding
+import com.flowos.base.interfaces.Logger
 import com.flowos.components.utils.viewBinding
 import dagger.android.AndroidInjection
 import javax.inject.Inject

@@ -1,38 +1,65 @@
 name: PR Pipeline Workflow
 
-# Execute PR Pipeline Workflow on any pull requests
-on: pull_request
+# Execute PR Pipeline Workflow on any pull requests.
+# This configuration was performed as a Azure's Build Policy
+
+resources:
+  - repo: self
 
 jobs:
   ##############################################################
   # Unit Test Job:
   # Install dependencies, run Kotlin linter and execute unit tests
   ##############################################################
-  run_checks:
-    runs-on: ubuntu-latest
+  - job: run_checks
+
+    pool:
+      vmImage: 'ubuntu-latest'
+
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
+      - task: JavaToolInstaller@0
+        displayName: 'Set up JDK'
+        inputs:
+          versionSpec: '11'
+          jdkArchitectureOption: 'x64'
+          jdkSourceOption: 'PreInstalled'
 
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: '11'
+      - task: SonarCloudPrepare@1
+        displayName: 'Set up SonarCloud'
+        inputs:
+          SonarCloud: 'sc-sonar'
+          organization: 'celerikdevops'
+          scannerMode: 'CLI'
+          configMode: 'file'
+          configFile: '.sonarcloud.properties'
 
-      - name: Set up Ruby 2.7
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.7.2
+      - task: SonarCloudAnalyze@1
+        displayName: 'Analyze source code'
 
-      - name: Install Dependencies
-        run: gem install bundler:2.2.11 && bundle install
 
-      - name: Run Fastlane Unit Test Lane
-        run: bundle exec fastlane run_checks
+      - task: SonarCloudPublish@1
+        displayName: 'Publish SonarCloud Results'
+        inputs:
+          pollingTimeoutSec: '3000'
+            
+      - task: UseRubyVersion@0
+        displayName: 'Set up Ruby 2.7'
+        inputs:
+          versionSpec: '2.7'
 
-      - name: JUnit Report Action
-        uses: mikepenz/action-junit-report@v2
-        if: ${{ always() }}
-        with:
-          report_paths: '**/test-results/**/TEST-*.xml'
+      - task: CmdLine@2
+        displayName: 'Install Dependencies'
+        inputs:
+          script: 'gem install bundler:2.2.11 && bundle install'
+
+      - task: CmdLine@2
+        displayName: 'Run Fastlane run_checks Lane'
+        inputs:
+          script: 'bundle exec fastlane run_checks'
+
+      - task: PublishTestResults@2
+        displayName: 'Publish JUnit Test Results'
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: '**/test-results/**/TEST-*.xml' 
+          failTaskOnFailedTests: true

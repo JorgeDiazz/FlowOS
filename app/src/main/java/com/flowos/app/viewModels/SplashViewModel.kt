@@ -2,6 +2,8 @@ package com.flowos.app.viewModels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.flowos.app.R
+import com.flowos.app.data.SplashNews
 import com.flowos.base.interfaces.Logger
 import com.flowos.base.interfaces.SingleUseCase
 import com.flowos.core.BaseViewModel
@@ -10,8 +12,6 @@ import com.flowos.core.exceptions.NoConnectionException
 import com.flowos.core.interfaces.AppResources
 import com.flowos.core.network.ServerException
 import com.flowos.core.qualifiers.VerifyInternet
-import com.flowos.app.R
-import com.flowos.app.data.SplashNews
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.schedulers.Schedulers

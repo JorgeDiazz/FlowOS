@@ -1,12 +1,12 @@
 package com.flowos.app.viewModels
 
+import com.flowos.app.data.SplashNews
 import com.flowos.base.interfaces.Logger
 import com.flowos.base.interfaces.SingleUseCase
 import com.flowos.core.Event
 import com.flowos.core.interfaces.AppResources
 import com.flowos.core.test.utils.InstantExecutorExtension
 import com.flowos.core.test.utils.RxSchedulerExtension
-import com.flowos.app.data.SplashNews
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension

@@ -24,6 +24,7 @@ Android Kotlin Boilerplate refers to standardized methods, procedures and files 
 * _Fastlane_ for CI/CD tasks.
 * _SonarCloud_ for static code analysis.
 * _Github_ workflows for automated PR actions and Firebase app distribution.
+* _Azure DevOps Pipelines_ workflows for automated PR actions.
 * _dokka_ for Kotlin's documentation generation.
 
 ## Installation  

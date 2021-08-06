@@ -1,6 +1,7 @@
 package com.flowos.app.di.modules
 
 import androidx.annotation.VisibleForTesting
+import com.flowos.app.BuildConfig
 import com.flowos.base.interfaces.Logger
 import com.flowos.core.di.BasePath
 import com.flowos.core.di.OkHttpClientBasic
@@ -8,7 +9,6 @@ import com.flowos.core.di.RetrofitBasic
 import com.flowos.core.di.RetrofitFlowOS
 import com.flowos.core.di.RetrofitNullSerializationEnabled
 import com.flowos.core.network.ServerInterceptor
-import com.flowos.app.BuildConfig
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides

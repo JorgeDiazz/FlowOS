@@ -1,8 +1,8 @@
 package com.flowos.app.di.modules
 
 import androidx.lifecycle.ViewModel
-import com.flowos.core.di.ViewModelKey
 import com.flowos.app.viewModels.MainViewModel
+import com.flowos.core.di.ViewModelKey
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

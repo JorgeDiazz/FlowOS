@@ -4,10 +4,10 @@ import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
 import android.os.StrictMode.VmPolicy
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.flowos.core.CoreApp
 import com.flowos.app.di.components.AppComponent
 import com.flowos.app.di.components.DaggerAppComponent
 import com.flowos.app.viewModels.FlowOSAppViewModel
+import com.flowos.core.CoreApp
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector

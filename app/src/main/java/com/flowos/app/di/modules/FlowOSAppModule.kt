@@ -2,9 +2,9 @@ package com.flowos.app.di.modules
 
 import android.content.ContentResolver
 import android.content.Context
+import com.flowos.app.viewModels.FlowOSAppViewModel
 import com.flowos.base.interfaces.Logger
 import com.flowos.core.interfaces.AppResources
-import com.flowos.app.viewModels.FlowOSAppViewModel
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
