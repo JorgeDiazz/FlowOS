@@ -65,7 +65,7 @@ object Versions {
 
 object Api {
   const val compileSDK = 30
-  const val minSDK = 21
+  const val minSDK = 23
   const val targetSDK = 30
 }
 

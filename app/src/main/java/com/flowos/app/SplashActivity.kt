@@ -1,9 +1,14 @@
 package com.flowos.app
 
+import android.annotation.SuppressLint
+import android.app.admin.DevicePolicyManager
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -30,11 +35,21 @@ class SplashActivity : AppCompatActivity() {
   lateinit var logger: Logger
 
   @Inject
+  lateinit var flowOSComponentName: ComponentName
+
+  @Inject
   lateinit var viewModelFactory: ViewModelProvider.Factory
 
   private val viewModel: SplashViewModel by viewModels { viewModelFactory }
 
   private val binding by viewBinding(ActivitySplashBinding::inflate)
+
+  private val lockTaskModeLauncher =
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+      when (result.resultCode) {
+        RESULT_OK -> setLockTaskMode()
+      }
+    }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     AndroidInjection.inject(this)
@@ -45,10 +60,43 @@ class SplashActivity : AppCompatActivity() {
 
     showVersionName()
 
+    initializeLockTaskMode()
     initializeSubscription()
-    initializeApp()
+  }
 
-    logger.d("SplashActivity started")
+  private fun initializeLockTaskMode() {
+    val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
+      putExtra(
+        DevicePolicyManager.EXTRA_DEVICE_ADMIN,
+        flowOSComponentName
+      )
+    }
+
+    lockTaskModeLauncher.launch(intent)
+  }
+
+  private fun setLockTaskMode() {
+    (applicationContext.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager).apply {
+      if (isDeviceOwnerApp(packageName)) {
+        setLockTaskPackages(flowOSComponentName, arrayOf(packageName))
+        startLockTask()
+        initializeApp()
+
+        logger.d("LockTask mode has successfully started!")
+      } else {
+        Snackbar.make(
+          binding.root,
+          getString(R.string.device_not_owner_app_message),
+          Snackbar.LENGTH_INDEFINITE
+        ).show()
+
+        logger.e("This device is not owner app.")
+      }
+    }
+  }
+
+  private fun initializeSubscription() {
+    viewModel.news.observe(this, EventObserver { handleNews(it) })
   }
 
   private fun initializeApp() {
@@ -60,10 +108,7 @@ class SplashActivity : AppCompatActivity() {
     )
   }
 
-  private fun initializeSubscription() {
-    viewModel.news.observe(this, EventObserver { handleNews(it) })
-  }
-
+  @SuppressLint("SetTextI18n")
   private fun showVersionName() {
     binding.textViewVersion.text = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
   }
@@ -102,7 +147,7 @@ class SplashActivity : AppCompatActivity() {
       setMessage(message)
       setCancelable(false)
       setPositiveButton(positiveButtonText) { dialog, _ ->
-        viewModel.retryInitialize()
+        viewModel.onViewActive()
         dialog.dismiss()
       }
       show()

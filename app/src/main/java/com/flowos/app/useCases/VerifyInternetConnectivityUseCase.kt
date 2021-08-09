@@ -27,7 +27,6 @@ class VerifyInternetConnectivityUseCase @Inject constructor(
 
         okHttpClient.newCall(request).execute().close()
       } catch (e: Exception) {
-        e.printStackTrace()
         hasInternetConnectivity = false
       }
 

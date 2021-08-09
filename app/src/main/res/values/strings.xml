@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">app</string>
+  <string name="app_name">FlowOS</string>
+
+  <string name="on_disable_requested_message">This action must be performed by a FlowOS manager. Continue?</string>
+  <string name="on_enabled_admin_receiver_message">FlowOS admin enabled.</string>
+  <string name="on_disabled_admin_receiver_message">FlowOS admin disabled.</string>
+  <string name="device_not_owner_app_message">It is not possible to start LockTask mode. Set it up as DeviceOwnerApp and restart the app!</string>
 </resources>

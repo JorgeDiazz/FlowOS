@@ -4,6 +4,7 @@ import android.app.Application
 import com.flowos.app.FlowOSApp
 import com.flowos.app.di.modules.ActivityModule
 import com.flowos.app.di.modules.BaseModule
+import com.flowos.app.di.modules.DeviceAdminReceiverModule
 import com.flowos.app.di.modules.FlowOSAppModule
 import com.flowos.app.di.modules.FlowOSUseCasesModule
 import com.flowos.app.di.modules.FragmentModule
@@ -31,6 +32,7 @@ import javax.inject.Singleton
     LoggerModule::class,
     FlowOSAppModule::class,
     FlowOSUseCasesModule::class,
+    DeviceAdminReceiverModule::class,
   ]
 )
 interface AppComponent : CoreComponent, AndroidInjector<FlowOSApp> {

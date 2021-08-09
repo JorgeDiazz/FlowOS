@@ -41,10 +41,6 @@ class SplashViewModel @Inject constructor(
     )
   }
 
-  fun retryInitialize() {
-    onViewActive()
-  }
-
   private fun validateConnectivity(): Completable {
     return Completable.defer {
       verifyInternetConnectivityUseCase.execute(Unit)

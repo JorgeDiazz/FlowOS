@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- To set device owner, it's required to execute the next command:
+adb shell dpm set-device-owner com.flowos.app.[staging]/com.flowos.app.FlowOSDeviceAdminReceiver
+-->
+<device-admin>
+  <uses-policies>
+    <limit-password />
+    <watch-login />
+    <reset-password />
+    <force-lock />
+    <wipe-data />
+    <expire-password />
+    <encrypted-storage />
+    <disable-camera />
+  </uses-policies>
+</device-admin>
