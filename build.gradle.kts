@@ -81,9 +81,13 @@ tasks.register("clean", Delete::class.java) {
 
 sonarqube {
   properties {
-    setProperty("sonar.organization", "flowos")
-    setProperty("sonar.projectKey", "flowos_android-kotlin-boilerplate")
+    setProperty("sonar.organization", "celerikdevops")
+    setProperty("sonar.projectKey", "flowos_android")
     setProperty("sonar.host.url", "https://sonarcloud.io")
     setProperty("sonar.sourceEncoding", "UTF-8")
+    setProperty("sonar.language", "kotlin")
+    setProperty("sonar.exclusions", "**/build/**, **/*.xml, **/test/**")
+    setProperty("sonar.coverage.exclusions", "**/test/**, **/androidTest/**")
+    setProperty("sonar.coverage.jacoco.xmlReportPaths", "**/build/reports/jacoco.xml")
   }
 }
