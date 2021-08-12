@@ -16,6 +16,9 @@ dependencies {
   implementation(Libraries.moshi)
   kapt(AnnotationProcessors.moshiCodegen)
 
+  kapt(AnnotationProcessors.dagger)
+  kapt(AnnotationProcessors.daggerAndroid)
+
   Libraries.suiteTest.forEach { testImplementation(it) }
 }
 

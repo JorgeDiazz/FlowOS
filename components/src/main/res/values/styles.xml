@@ -6,7 +6,7 @@
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
   </style>
-  
+
   <!--region Dialogs-->
   <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
     <item name="android:textColor">@color/black</item>
@@ -25,5 +25,62 @@
     <item name="android:textColor">@color/red</item>
   </style>
   <!--endregion-->
+
+  <!--region Inputs-->
+  <style name="Widget.App.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <item name="materialThemeOverlay">@style/ThemeOverlay.App.TextInputLayout</item>
+  </style>
+
+  <style name="ThemeOverlay.App.TextInputLayout" parent="@style/ThemeOverlay.MaterialComponents.AutoCompleteTextView.OutlinedBox">
+    <item name="colorPrimary">@color/red</item>
+    <item name="colorOnSurface">@color/grey_light</item>
+    <item name="boxStrokeWidth">1dp</item>
+    <item name="boxStrokeWidthFocused">1dp</item>
+    <item name="textAppearanceSubtitle1">@style/TextAppearance.App.Subtitle1</item>
+    <item name="editTextStyle">@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox</item>
+    <item name="autoCompleteTextViewStyle">@style/Widget.App.AutoCompleteTextView.OutlinedBox</item>
+  </style>
+
+  <style name="TextAppearance.App.Subtitle1" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <item name="android:textSize">14sp</item>
+    <item name="android:textColor">@color/bluish_grey_two</item>
+    <item name="fontFamily">@font/montserrat_regular</item>
+  </style>
+
+  <style name="Widget.App.AutoCompleteTextView.OutlinedBox" parent="@style/Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox">
+    <item name="android:paddingRight">@dimen/spacing_normal_600</item>
+    <item name="android:paddingLeft">@dimen/spacing_normal_600</item>
+    <item name="android:paddingStart">@dimen/spacing_normal_600</item>
+    <item name="android:paddingEnd">@dimen/spacing_normal_600</item>
+  </style>
+  <!--endregion-->
+
+  <!--region TextView-->
+  <style name="TextViewLabel">
+    <item name="android:textSize">@dimen/text_size_subtitle_3</item>
+    <item name="android:textColor">@color/grey_bluish</item>
+    <item name="fontFamily">@font/montserrat_bold</item>
+  </style>
+  <!--endregion-->
+
+  <!--region Buttons-->
+  <style name="PrimaryButton" parent="Widget.MaterialComponents.Button.TextButton">
+    <item name="android:textAllCaps">false</item>
+    <item name="android:textSize">@dimen/text_size_subtitle_1</item>
+    <item name="android:textColor">@color/white</item>
+    <item name="android:letterSpacing">0</item>
+    <item name="android:insetTop">0dp</item>
+    <item name="android:insetBottom">0dp</item>
+    <item name="colorButtonNormal">@color/aquamarine</item>
+    <item name="backgroundTint">@color/btn_colored_selector</item>
+    <item name="rippleColor">@color/white</item>
+    <item name="strokeColor">@color/btn_colored_selector</item>
+    <item name="strokeWidth">1dp</item>
+    <item name="cornerRadius">4dp</item>
+    <item name="elevation">0dp</item>
+    <item name="fontFamily">@font/montserrat_bold</item>
+    <!--endregion-->
+
+  </style>
 
 </resources>

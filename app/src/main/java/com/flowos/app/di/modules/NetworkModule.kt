@@ -112,6 +112,21 @@ object NetworkModule {
 
   @Provides
   @Singleton
+  @RetrofitFlowOS
+  fun providesRetrofitFlowOS(
+    @RetrofitFlowOS okHttpClient: OkHttpClient,
+    @BasePath basePath: String,
+  ): Retrofit {
+    return Retrofit.Builder()
+      .client(okHttpClient)
+      .baseUrl(basePath)
+      .addConverterFactory(MoshiConverterFactory.create())
+      .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+      .build()
+  }
+
+  @Provides
+  @Singleton
   @BasePath
   fun providesBasePath(): String {
     return BuildConfig.BASE_URL

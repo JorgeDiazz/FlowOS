@@ -24,6 +24,8 @@ platform :android do
  desc "Execute unit tests"
   private_lane :unit_tests do
     gradle(task: "app:checkCoverage")
+    gradle(task: "auth:checkCoverage")
+    gradle(task: "auth-domain:checkCoverage")
     gradle(task: "base:checkCoverage")
     gradle(task: "core:testDebugUnitTest")
    end

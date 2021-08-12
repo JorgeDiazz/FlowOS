@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorPrimary">@color/grey_pale_light</color>
+  <color name="colorPrimary">@color/red</color>
   <color name="colorPrimaryDark">@color/grey_blackish</color>
   <color name="colorAccent">@color/blue_dark</color>
 
   <color name="black">#000000</color>
-  <color name="red">#ee417f</color>
+  <color name="white">#FFFFFF</color>
+  <color name="red">#E91C63</color>
   <color name="aquamarine">#00d4c8</color>
   <color name="grey_pale_light">#f8f8f9</color>
   <color name="grey_blackish">#8a000000</color>
   <color name="blue_dark">#012C3D</color>
+  <color name="blue_navy">#012c3d</color>
+  <color name="grey_light">#AAA</color>
+  <color name="bluish_grey_two">#7c8d94</color>\
+  <color name="grey_bluish">#7d8d94</color>
+  <color name="light_periwinkle">#dbdbe3</color>
 </resources>

@@ -7,11 +7,7 @@ import com.flowos.base.interfaces.Cache
 class SharedPreferencesCache(name: String, context: Context) : Cache {
 
   private var sharedPreferences = context.getSharedPreferences(name, Context.MODE_PRIVATE)
-  private val editor: SharedPreferences.Editor
-
-  init {
-    editor = sharedPreferences.edit()
-  }
+  private val editor: SharedPreferences.Editor = sharedPreferences.edit()
 
   override fun saveString(key: String, value: String) {
     editor.putString(key, value)

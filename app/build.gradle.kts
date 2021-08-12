@@ -105,6 +105,8 @@ android {
 }
 
 dependencies {
+  implementation(project(":auth"))
+  implementation(project(":auth-domain"))
   implementation(project(":base"))
   implementation(project(":components"))
   implementation(project(":core"))
@@ -203,11 +205,11 @@ afterEvaluate {
     buildDir,
     "testStagingInternalDebugUnitTest",
     Coverage(
-      instructions = 24.03,
-      lines = 29.03,
-      complexity = 19.44,
-      methods = 22.22,
-      classes = 31.82
+      instructions = 24.24,
+      lines = 28.01,
+      complexity = 18.75,
+      methods = 21.74,
+      classes = 26.92
     ),
     listOf("**/tmp/kotlin-classes/stagingInternalDebug/**"),
     emptyList()

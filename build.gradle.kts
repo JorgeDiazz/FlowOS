@@ -88,6 +88,7 @@ sonarqube {
     setProperty("sonar.language", "kotlin")
     setProperty("sonar.exclusions", "**/build/**, **/*.xml, **/test/**")
     setProperty("sonar.coverage.exclusions", "**/test/**, **/androidTest/**")
-    setProperty("sonar.coverage.jacoco.xmlReportPaths", "**/build/reports/jacoco.xml")
+    setProperty("sonar.java.coveragePlugin", "jacoco")
+    setProperty("sonar.jacoco.reportPaths", "**/build/jacoco/*.exec")
   }
 }

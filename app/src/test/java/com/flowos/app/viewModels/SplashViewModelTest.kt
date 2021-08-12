@@ -28,6 +28,9 @@ class SplashViewModelTest {
   @MockK(relaxed = true)
   private lateinit var verifyInternetConnectivityUseCase: SingleUseCase<Unit, Boolean>
 
+  @MockK(relaxed = true)
+  private lateinit var isUserLoggedUseCase: SingleUseCase<Unit, Boolean>
+
   private lateinit var viewModel: SplashViewModel
 
   @BeforeEach
@@ -36,6 +39,7 @@ class SplashViewModelTest {
       logger,
       resources,
       verifyInternetConnectivityUseCase,
+      isUserLoggedUseCase,
     )
   }
 

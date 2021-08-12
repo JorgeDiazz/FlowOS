@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.flowos.auth">
+
+  <application>
+    <activity
+      android:name=".LoginActivity"
+      android:lockTaskMode="if_whitelisted"
+      android:screenOrientation="portrait"
+      android:theme="@style/AppTheme"
+      android:windowSoftInputMode="adjustResize" />
+  </application>
+
+</manifest>

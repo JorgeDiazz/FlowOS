@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.flowos.app.data.SplashNews
 import com.flowos.app.databinding.ActivitySplashBinding
 import com.flowos.app.viewModels.SplashViewModel
+import com.flowos.auth.LoginActivity
 import com.flowos.base.interfaces.Logger
 import com.flowos.base.others.ONE_SECOND_IN_MILLISECONDS
 import com.flowos.components.utils.viewBinding
@@ -121,19 +122,22 @@ class SplashActivity : AppCompatActivity() {
 
   private fun handleNews(news: SplashNews) {
     when (news) {
-      is SplashNews.AppInitialized -> {
-        handleAppInitialized()
-      }
-      is SplashNews.ShowErrorNews -> {
-        Snackbar.make(binding.root, news.errorMessage, Snackbar.LENGTH_INDEFINITE).show()
-      }
-      is SplashNews.ShowNoConnectivityView -> {
-        showNoConnectionAlert()
-      }
-      is SplashNews.FinishSplashNews -> {
-        finish()
-      }
+      is SplashNews.AppInitialized -> handleAppInitialized()
+      is SplashNews.ShowErrorNews -> Snackbar.make(
+        binding.root,
+        news.errorMessage,
+        Snackbar.LENGTH_INDEFINITE
+      ).show()
+      is SplashNews.ShowNoConnectivityView -> showNoConnectionAlert()
+      is SplashNews.OpenLoginNews -> startLoginActivity()
+      is SplashNews.FinishSplashNews -> finish()
     }
+  }
+
+  private fun startLoginActivity() {
+    val countrySelectionIntent = Intent(this, LoginActivity::class.java)
+    startActivity(countrySelectionIntent)
+    finish()
   }
 
   private fun showNoConnectionAlert() {

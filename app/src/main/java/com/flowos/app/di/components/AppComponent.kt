@@ -11,6 +11,8 @@ import com.flowos.app.di.modules.FragmentModule
 import com.flowos.app.di.modules.IntentsModule
 import com.flowos.app.di.modules.LoggerModule
 import com.flowos.app.di.modules.NetworkModule
+import com.flowos.app.di.modules.NetworkServicesModule
+import com.flowos.app.di.modules.RepositoriesModule
 import com.flowos.core.CoreComponent
 import dagger.BindsInstance
 import dagger.Component
@@ -27,9 +29,11 @@ import javax.inject.Singleton
     AndroidSupportInjectionModule::class,
     BaseModule::class,
     NetworkModule::class,
+    NetworkServicesModule::class,
     ActivityModule::class,
     FragmentModule::class,
     LoggerModule::class,
+    RepositoriesModule::class,
     FlowOSAppModule::class,
     FlowOSUseCasesModule::class,
     DeviceAdminReceiverModule::class,

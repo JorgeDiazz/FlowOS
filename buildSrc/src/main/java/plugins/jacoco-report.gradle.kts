@@ -33,7 +33,6 @@ extra.set(
 
       reports {
         xml.isEnabled = true
-        xml.destination = File("${buildDirectory.absolutePath}/reports/jacoco.xml")
         csv.isEnabled = false
         html.isEnabled = true
         html.destination = File("${buildDirectory.absolutePath}/reports/coverage")

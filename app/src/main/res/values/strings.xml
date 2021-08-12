@@ -1,6 +1,4 @@
 <resources>
-  <string name="app_name">FlowOS</string>
-
   <string name="on_disable_requested_message">This action must be performed by a FlowOS manager. Continue?</string>
   <string name="on_enabled_admin_receiver_message">FlowOS admin enabled.</string>
   <string name="on_disabled_admin_receiver_message">FlowOS admin disabled.</string>

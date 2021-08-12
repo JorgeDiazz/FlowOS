@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:paddingHorizontal="@dimen/spacing_normal_800"
+  tools:context=".LoginActivity">
+
+  <TextView
+    android:id="@+id/textView_title"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/spacing_huge_100"
+    android:fontFamily="@font/montserrat_semibold"
+    android:gravity="center"
+    android:text="@string/app_name"
+    android:textColor="@color/red"
+    android:textSize="38sp"
+    app:layout_constraintBottom_toTopOf="@+id/textView_driver_id_title"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+    android:id="@+id/textView_driver_id_title"
+    style="@style/TextViewLabel"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/spacing_huge_100"
+    android:text="@string/driver_id"
+    app:layout_constraintBottom_toTopOf="@+id/textField_driver_id"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.5"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/textView_title" />
+
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/textField_driver_id"
+    style="@style/Widget.App.TextInputLayout"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/spacing_small_400"
+    android:paddingBottom="@dimen/spacing_normal_600"
+    app:hintEnabled="false"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/textView_driver_id_title">
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/your_driver_id"
+      android:inputType="textNoSuggestions"
+      android:letterSpacing="0"
+      android:textColor="@color/blue_navy" />
+  </com.google.android.material.textfield.TextInputLayout>
+
+
+  <TextView
+    android:id="@+id/textView_running_board_id"
+    style="@style/TextViewLabel"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/spacing_normal_800"
+    android:text="@string/running_board_id"
+    app:layout_constraintBottom_toTopOf="@+id/textField_running_board_id"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.5"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/textField_driver_id" />
+
+  <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/textField_running_board_id"
+    style="@style/Widget.App.TextInputLayout"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/spacing_small_400"
+    android:paddingBottom="@dimen/spacing_normal_600"
+    app:hintEnabled="false"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/textView_running_board_id">
+
+    <com.google.android.material.textfield.TextInputEditText
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/current_running_board_id"
+      android:inputType="textNoSuggestions"
+      android:letterSpacing="0"
+      android:textColor="@color/blue_navy" />
+  </com.google.android.material.textfield.TextInputLayout>
+
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/button_continue"
+    style="@style/PrimaryButton"
+    android:layout_width="0dp"
+    android:layout_height="@dimen/height_button_normal_200"
+    android:text="@string/start_shift_button"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/textField_running_board_id" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+

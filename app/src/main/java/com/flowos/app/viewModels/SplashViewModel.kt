@@ -11,6 +11,7 @@ import com.flowos.core.Event
 import com.flowos.core.exceptions.NoConnectionException
 import com.flowos.core.interfaces.AppResources
 import com.flowos.core.network.ServerException
+import com.flowos.core.qualifiers.IsUserLogged
 import com.flowos.core.qualifiers.VerifyInternet
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
@@ -23,6 +24,7 @@ class SplashViewModel @Inject constructor(
   private val logger: Logger,
   private val resources: AppResources,
   @VerifyInternet private val verifyInternetConnectivityUseCase: SingleUseCase<Unit, Boolean>,
+  @IsUserLogged private val isUserLoggedUseCase: SingleUseCase<Unit, Boolean>,
 ) : BaseViewModel() {
 
   private val _news = MutableLiveData<Event<SplashNews>>()
@@ -31,6 +33,7 @@ class SplashViewModel @Inject constructor(
   fun onViewActive() {
     disposables.add(
       validateConnectivity()
+        .andThen(validateUserIsLogged())
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe({
@@ -54,6 +57,19 @@ class SplashViewModel @Inject constructor(
     }
   }
 
+  private fun validateUserIsLogged(): Completable {
+    return Completable.defer {
+      isUserLoggedUseCase.execute(Unit)
+        .flatMapCompletable { isUserLogged ->
+          if (isUserLogged) {
+            Completable.complete()
+          } else {
+            Completable.error(UserNotLoggedException())
+          }
+        }
+    }
+  }
+
   private fun handleError(throwable: Throwable) {
     when (throwable) {
       is ConnectException -> {
@@ -70,6 +86,10 @@ class SplashViewModel @Inject constructor(
       is NoConnectionException -> {
         _news.value = Event(SplashNews.ShowNoConnectivityView)
       }
+      is UserNotLoggedException -> {
+        _news.value = Event(SplashNews.OpenLoginNews)
+        logger.d("SplashViewModel InitializeException", throwable)
+      }
       is UpdateRequiredException -> {
         _news.value = Event(SplashNews.FinishSplashNews)
         logger.d("SplashViewModel InitializeException", throwable)
@@ -81,5 +101,6 @@ class SplashViewModel @Inject constructor(
     }
   }
 
+  private class UserNotLoggedException : Exception()
   private class UpdateRequiredException : Exception()
 }
