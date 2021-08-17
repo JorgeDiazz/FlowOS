@@ -1,7 +1,13 @@
 package com.flowos.components.utils
 
 import android.os.Parcelable
+import android.view.View
+import androidx.annotation.NonNull
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.Fragment
+import com.flowos.components.R
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import java.io.Serializable
 
 inline fun <reified T : Serializable?> Fragment.getSerializableArgument(key: String, default: T? = null): T {
@@ -26,4 +32,17 @@ inline fun <reified T : Parcelable?> Fragment.getParcelableArgument(key: String,
     throw Exception("Unable to get parcelable $key from bundle argument")
   }
   return value as T
+}
+
+fun makeErrorSnackbar(
+  @NonNull view: View,
+  @NonNull text: CharSequence,
+  @BaseTransientBottomBar.Duration duration: Int
+): Snackbar {
+  return Snackbar.make(
+    ContextThemeWrapper(view.context, R.style.App_Snackbar_ErrorThemeOverlay),
+    view,
+    text,
+    duration
+  )
 }

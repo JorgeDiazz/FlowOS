@@ -6,6 +6,7 @@ import com.flowos.auth.domain.data.LoginData
 import com.flowos.base.interfaces.Logger
 import com.flowos.base.interfaces.SingleUseCase
 import com.flowos.base.interfaces.UseCase
+import com.flowos.core.interfaces.AppResources
 import com.flowos.core.test.utils.InstantExecutorExtension
 import com.flowos.core.test.utils.RxSchedulerExtension
 import io.mockk.every
@@ -23,6 +24,9 @@ class LoginViewModelTest {
   private lateinit var logger: Logger
 
   @MockK(relaxed = true)
+  private lateinit var appResources: AppResources
+
+  @MockK(relaxed = true)
   private lateinit var loginUserUseCase: SingleUseCase<Pair<LoginData, String?>, DriverData>
 
   @MockK(relaxed = true)
@@ -34,6 +38,7 @@ class LoginViewModelTest {
   fun setUp() {
     viewModel = LoginViewModel(
       logger,
+      appResources,
       loginUserUseCase,
       getDeviceIdUseCase
     )

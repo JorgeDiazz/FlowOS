@@ -5,13 +5,16 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.flowos.auth.WelcomeActivity.Companion.DRIVER_DATA_KEY
 import com.flowos.auth.data.LoginNews
+import com.flowos.auth.data.parcelize
 import com.flowos.auth.databinding.ActivityLoginBinding
+import com.flowos.auth.domain.data.DriverData
 import com.flowos.auth.viewModels.LoginViewModel
 import com.flowos.base.interfaces.Logger
+import com.flowos.components.utils.makeErrorSnackbar
 import com.flowos.components.utils.viewBinding
 import com.flowos.core.EventObserver
-import com.flowos.core.di.OpenMain
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.AndroidInjection
 import javax.inject.Inject
@@ -22,11 +25,6 @@ import javax.inject.Inject
  * This is the interface to log-in users.
  */
 class LoginActivity : AppCompatActivity() {
-
-  @Inject
-  @OpenMain
-  @JvmSuppressWildcards
-  lateinit var openMainAction: () -> Intent
 
   @Inject
   lateinit var logger: Logger
@@ -54,8 +52,8 @@ class LoginActivity : AppCompatActivity() {
 
   private fun handleNews(news: LoginNews) {
     when (news) {
-      is LoginNews.LoginSuccessful -> startMainActivity()
-      is LoginNews.ShowErrorNews -> Snackbar.make(
+      is LoginNews.LoginSuccessful -> startWelcomeActivity(news.driverData)
+      is LoginNews.ShowErrorNews -> makeErrorSnackbar(
         binding.root,
         news.message,
         Snackbar.LENGTH_LONG
@@ -63,9 +61,12 @@ class LoginActivity : AppCompatActivity() {
     }
   }
 
-  private fun startMainActivity() {
-    startActivity(openMainAction())
-    finish()
+  private fun startWelcomeActivity(driverData: DriverData) {
+    Intent(this, WelcomeActivity::class.java).apply {
+      putExtra(DRIVER_DATA_KEY, driverData.parcelize())
+      startActivity(this)
+      finish()
+    }
   }
 
   private fun setUpView() {

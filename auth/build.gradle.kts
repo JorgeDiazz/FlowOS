@@ -5,6 +5,8 @@ plugins {
   id("plugins.jacoco-report")
   kotlin("android")
   kotlin("kapt")
+  kotlin("plugin.parcelize")
+  id("kotlin-android")
 }
 
 android {
@@ -71,11 +73,11 @@ afterEvaluate {
     buildDir,
     "testDebugUnitTest",
     Coverage(
-      instructions = 47.08,
-      lines = 49.22,
-      complexity = 30.43,
-      methods = 33.33,
-      classes = 57.14
+      instructions = 40.00,
+      lines = 42.99,
+      complexity = 23.14,
+      methods = 25.69,
+      classes = 41.38
     ),
     emptyList(),
     emptyList()

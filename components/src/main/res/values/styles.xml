@@ -79,8 +79,38 @@
     <item name="cornerRadius">4dp</item>
     <item name="elevation">0dp</item>
     <item name="fontFamily">@font/montserrat_bold</item>
-    <!--endregion-->
-
   </style>
+  <!--endregion-->
+
+  <!--region Snackbar-->
+  <style name="App.Snackbar.ErrorThemeOverlay" parent="ThemeOverlay.MaterialComponents.Light">
+    <item name="snackbarStyle">@style/Widget.App.ErrorSnackbar</item>
+    <item name="snackbarTextViewStyle">@style/Widget.App.Snackbar.ErrorTextView</item>
+  </style>
+
+  <style name="Widget.App.ErrorSnackbar" parent="Widget.MaterialComponents.Snackbar">
+    <item name="materialThemeOverlay">@style/ThemeOverlay.App.ErrorSnackbar</item>
+    <item name="actionTextColorAlpha">1</item>
+  </style>
+
+  <style name="Widget.App.Snackbar.TextView" parent="Widget.MaterialComponents.Snackbar.TextView">
+    <item name="android:textSize">@dimen/text_size_subtitle_3</item>
+    <item name="android:ellipsize">end</item>
+    <item name="android:maxLines">@null</item>
+    <item name="android:textAlignment">viewStart</item>
+    <item name="android:textAppearance">?attr/textAppearanceBody2</item>
+    <item name="android:drawablePadding">@dimen/spacing_small_800</item>
+  </style>
+
+  <style name="Widget.App.Snackbar.ErrorTextView" parent="Widget.App.Snackbar.TextView">
+    <item name="android:textColor">@color/red</item>
+    <item name="drawableStartCompat">@drawable/ic_error_red_12dp</item>
+  </style>
+
+  <style name="ThemeOverlay.App.ErrorSnackbar" parent="">
+    <item name="colorOnSurface">@color/grey_pale_dark</item>
+  </style>
+  <!--endregion-->
+
 
 </resources>

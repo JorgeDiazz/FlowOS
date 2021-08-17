@@ -4,6 +4,13 @@
 
   <application>
     <activity
+      android:name=".WelcomeActivity"
+      android:lockTaskMode="if_whitelisted"
+      android:screenOrientation="portrait"
+      android:theme="@style/AppTheme"
+      android:windowSoftInputMode="adjustResize" />
+
+    <activity
       android:name=".LoginActivity"
       android:lockTaskMode="if_whitelisted"
       android:screenOrientation="portrait"
