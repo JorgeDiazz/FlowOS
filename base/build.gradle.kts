@@ -28,13 +28,13 @@ afterEvaluate {
     buildDir,
     "test",
     Coverage(
-      instructions = 8.24,
-      lines = 12.31,
-      complexity = 12.82,
-      methods = 9.68,
-      classes = 9.09
+      instructions = 3.89,
+      lines = 5.41,
+      complexity = 6.85,
+      methods = 5.17,
+      classes = 5.26
     ),
     emptyList(),
-    listOf("**/base/data/**", "**/base/Either*", "**/base/utils/Tuples*")
+    emptyList()
   )
 }

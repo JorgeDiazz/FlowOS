@@ -28,6 +28,7 @@ platform :android do
     gradle(task: "auth-domain:checkCoverage")
     gradle(task: "base:checkCoverage")
     gradle(task: "core:testDebugUnitTest")
+    gradle(task: "sensors:checkCoverage")
    end
 
   desc "Assemble app"

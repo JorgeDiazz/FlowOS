@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".SensorsFragment">
+
+  <TextView
+    android:id="@+id/textView_vehicle_id_title"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/spacing_large_300"
+    android:layout_marginTop="@dimen/spacing_huge_100"
+    android:fontFamily="@font/montserrat_semibold"
+    android:text="@string/vehicle_id"
+    android:textColor="@color/blue_navy"
+    android:textSize="@dimen/text_size_headline_2"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+    android:id="@+id/textView_vehicle_id_value"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/spacing_large_300"
+    android:layout_marginTop="@dimen/spacing_huge_100"
+    android:fontFamily="@font/montserrat_medium"
+    android:textColor="@color/blue_navy"
+    android:textSize="@dimen/text_size_headline_2"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@id/textView_vehicle_id_title"
+    app:layout_constraintTop_toTopOf="parent"
+    android:text="@string/empty_value"
+    tools:text="12321321" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

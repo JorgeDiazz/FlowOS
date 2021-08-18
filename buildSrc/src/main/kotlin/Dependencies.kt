@@ -3,6 +3,8 @@ object Versions {
   const val gradle = "4.2.2"
   const val jvmTarget = "1.8"
 
+  const val preferences = "1.1.1"
+
   const val googleServices = "4.3.8"
 
   const val gradleKlint = "10.0.0"
@@ -74,9 +76,10 @@ object Libraries {
   const val appcompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
   const val androidXCore = "androidx.core:core-ktx:${Versions.core}"
   const val material = "com.google.android.material:material:${Versions.material}"
-  const val constraintLayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
+  const val constraintLayout =
+    "androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}"
 
-  const val preferences = "androidx.preference:preference-ktx:1.1.1"
+  const val preferences = "androidx.preference:preference-ktx:${Versions.preferences}"
   const val fragmentKtx = "androidx.fragment:fragment-ktx:${Versions.fragmentKtx}"
   const val activityKtx = "androidx.activity:activity-ktx:${Versions.activityKtx}"
   const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerView}"
@@ -127,7 +130,8 @@ object Libraries {
   const val jUnit5 = "org.junit.jupiter:junit-jupiter:${Versions.jUnit5}"
   const val jUnit5Engine = "org.junit.jupiter:junit-jupiter-engine:${Versions.jUnit5}"
 
-  val suiteTest = arrayOf(mockk, jUnit5, jUnitExtKtx, testCoreKtx, kotlinTest, kotlinReflect, kotlinTestJunit)
+  val suiteTest =
+    arrayOf(mockk, jUnit5, jUnitExtKtx, testCoreKtx, kotlinTest, kotlinReflect, kotlinTestJunit)
 
   const val leakCanary = "com.squareup.leakcanary:leakcanary-android:${Versions.leakCanary}"
   const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
