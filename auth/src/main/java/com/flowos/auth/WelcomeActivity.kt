@@ -7,7 +7,7 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.flowos.auth.data.DriverDataArgument
 import com.flowos.auth.databinding.ActivityWelcomeBinding
-import com.flowos.base.others.FIVE_SECOND_IN_MILLISECONDS
+import com.flowos.base.others.FIVE_SECONDS_IN_MILLISECONDS
 import com.flowos.components.utils.viewBinding
 import com.flowos.core.di.OpenMain
 import dagger.android.AndroidInjection
@@ -57,7 +57,7 @@ class WelcomeActivity : AppCompatActivity() {
       {
         startMainActivity()
       },
-      FIVE_SECOND_IN_MILLISECONDS
+      FIVE_SECONDS_IN_MILLISECONDS
     )
   }
 

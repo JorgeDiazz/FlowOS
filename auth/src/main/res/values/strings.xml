@@ -1,10 +1,11 @@
 <resources>
-    <string name="driver_id">Driver ID</string>
-    <string name="your_driver_id">Your driver\'s ID</string>
-    <string name="running_board_id">Running board ID</string>
-    <string name="current_running_board_id">Current running board ID</string>
-    <string name="start_shift_button">Start Shift</string>
+  <string name="driver_id">Driver ID</string>
+  <string name="your_driver_id">Your driver\'s ID</string>
+  <string name="running_board_id">Running board ID</string>
+  <string name="current_running_board_id">Current running board ID</string>
+  <string name="start_shift_button">Start Shift</string>
   <string name="welcome_title">Welcome</string>
   <string name="have_a_safe_journey">Have a \nsafe journey!</string>
-    <string name="error_when_trying_to_login">Error when trying to login</string>
+  <string name="error_when_trying_to_login">Error when trying to login</string>
+  <string name="board_id_does_not_exist">The Board ID specified does not exist</string>
 </resources>

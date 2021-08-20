@@ -73,7 +73,8 @@ class LoginActivity : AppCompatActivity() {
     binding.apply {
       buttonContinue.setOnClickListener {
         val driverId = textFieldDriverId.editText?.text.toString()
-        viewModel.loginUser(driverId)
+        val boardId = textFieldRunningBoardId.editText?.text.toString()
+        viewModel.loginUser(driverId, boardId)
       }
     }
   }

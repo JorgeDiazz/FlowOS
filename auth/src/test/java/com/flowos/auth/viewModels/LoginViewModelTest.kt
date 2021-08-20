@@ -3,6 +3,7 @@ package com.flowos.auth.viewModels
 import com.flowos.auth.data.LoginNews
 import com.flowos.auth.domain.data.DriverData
 import com.flowos.auth.domain.data.LoginData
+import com.flowos.base.interfaces.Cache
 import com.flowos.base.interfaces.Logger
 import com.flowos.base.interfaces.SingleUseCase
 import com.flowos.base.interfaces.UseCase
@@ -27,6 +28,9 @@ class LoginViewModelTest {
   private lateinit var appResources: AppResources
 
   @MockK(relaxed = true)
+  private lateinit var cache: Cache
+
+  @MockK(relaxed = true)
   private lateinit var loginUserUseCase: SingleUseCase<Pair<LoginData, String?>, DriverData>
 
   @MockK(relaxed = true)
@@ -39,6 +43,7 @@ class LoginViewModelTest {
     viewModel = LoginViewModel(
       logger,
       appResources,
+      cache,
       loginUserUseCase,
       getDeviceIdUseCase
     )
@@ -48,6 +53,7 @@ class LoginViewModelTest {
   fun `Should send LoginSuccessful event when it's possible to login`() {
     // given
     val driverId = "123456"
+    val boardId = "1234"
     val deviceId = "123213213"
     val driverData = DriverData(
       driverName = "Jane Smith",
@@ -59,9 +65,31 @@ class LoginViewModelTest {
     every { loginUserUseCase.execute(any()) } returns Single.just(driverData)
 
     // when
-    viewModel.loginUser(driverId)
+    viewModel.loginUser(driverId, boardId)
 
     // then
     assert(viewModel.news.value!!.peekContent() is LoginNews.LoginSuccessful)
+  }
+
+  @Test
+  fun `Should send ShowErrorNews event when boardId doesn't match with boards list`() {
+    // given
+    val driverId = "123456"
+    val boardId = "123411111"
+    val deviceId = "123213213"
+    val driverData = DriverData(
+      driverName = "Jane Smith",
+      boards = listOf("1234", "abcd"),
+    )
+
+    every { getDeviceIdUseCase.execute(Unit) } returns deviceId
+
+    every { loginUserUseCase.execute(any()) } returns Single.just(driverData)
+
+    // when
+    viewModel.loginUser(driverId, boardId)
+
+    // then
+    assert(viewModel.news.value!!.peekContent() is LoginNews.ShowErrorNews)
   }
 }

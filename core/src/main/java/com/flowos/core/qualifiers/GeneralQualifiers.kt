@@ -7,6 +7,9 @@ import javax.inject.Qualifier
 annotation class VerifyInternet
 
 @Qualifier
+annotation class LongDateToTimestamp
+
+@Qualifier
 annotation class GetDeviceId
 
 @Qualifier

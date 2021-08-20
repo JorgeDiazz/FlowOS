@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="vehicle_id">Vehicle ID:</string>
-    <string name="empty_value">--</string>
+  <string name="empty_value">--</string>
+  <string name="permission_required_message">This permission is required to execute FlowOS properly!</string>
+  <string name="location_update_published_message">GPS location updated!</string>
 </resources>

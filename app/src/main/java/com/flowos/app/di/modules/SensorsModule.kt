@@ -1,4 +1,4 @@
-package com.flowos.sensors.di
+package com.flowos.app.di.modules
 
 import androidx.lifecycle.ViewModel
 import com.flowos.core.di.ViewModelKey

@@ -4,4 +4,6 @@ data class SensorsUiModel(
   val vehicleId: String? = null
 )
 
-sealed class SensorsNews
+sealed class SensorsNews {
+  object LocationUpdatePublished : SensorsNews()
+}
