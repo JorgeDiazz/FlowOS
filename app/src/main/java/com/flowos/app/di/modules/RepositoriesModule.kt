@@ -6,7 +6,7 @@ import com.flowos.auth.domain.services.AuthService
 import com.flowos.auth.repositories.CredentialsRepository
 import com.flowos.auth.repositories.CredentialsRepositoryImpl
 import com.flowos.base.interfaces.Cache
-import com.flowos.core.data.SharedPreferencesCache
+import com.flowos.core.data.CacheImpl
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -17,7 +17,7 @@ object RepositoriesModule {
   @Provides
   @Singleton
   fun providesCache(context: Context): Cache {
-    return SharedPreferencesCache(
+    return CacheImpl(
       name = "general",
       context = context.applicationContext
     )
@@ -27,7 +27,7 @@ object RepositoriesModule {
   @Singleton
   fun providesCredentialsRepository(context: Context): CredentialsRepository {
     return CredentialsRepositoryImpl(
-      SharedPreferencesCache(
+      CacheImpl(
         name = "credentials",
         context = context.applicationContext
       )

@@ -4,6 +4,8 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
@@ -21,17 +23,20 @@ import com.flowos.core.EventObserver
 import com.flowos.sensors.data.SensorsNews
 import com.flowos.sensors.data.SensorsUiModel
 import com.flowos.sensors.databinding.FragmentSensorsBinding
+import com.flowos.sensors.listeners.MotionSensorListener
 import com.flowos.sensors.viewModels.SensorsViewModel
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 private const val LOCATION_TRIGGER_DISTANCE_IN_METERS: Long = 1
-private const val LOCATION_TRIGGER_GET_DATA_EVERY_N_SECONDS: Float = FIVE_SECONDS_IN_MILLISECONDS.toFloat()
+private const val LOCATION_TRIGGER_GET_DATA_INTERVAL_DURATION_IN_SECONDS: Float = FIVE_SECONDS_IN_MILLISECONDS.toFloat()
+
+private val MOTION_SENSORS = arrayOf(Sensor.TYPE_ACCELEROMETER, Sensor.TYPE_LINEAR_ACCELERATION, Sensor.TYPE_GYROSCOPE)
 
 /**
  * Represents sensors fragment.
  *
- * This is the orchestrator of sensors functionality (GPS, BLE, NFC).
+ * This is the orchestrator of sensors functionality (GPS, BLE, NFC, -linear- accelerometer, gyroscope).
  */
 class SensorsFragment : Fragment(R.layout.fragment_sensors) {
 
@@ -47,7 +52,7 @@ class SensorsFragment : Fragment(R.layout.fragment_sensors) {
         setUpLocationManager()
       } else {
         showPermissionRequiredMessage()
-        initializeGps()
+        initializeLocationSensor()
       }
     }
 
@@ -64,6 +69,12 @@ class SensorsFragment : Fragment(R.layout.fragment_sensors) {
   private val viewModel: SensorsViewModel by viewModels { viewModelFactory }
 
   private val binding by viewBinding(FragmentSensorsBinding::bind)
+
+  private val locationSensorManager by lazy { requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager }
+
+  private val motionSensorManager by lazy { requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager }
+
+  private val motionSensorListener = MotionSensorListener { viewModel.cacheSensorMeasure(it) }
 
   override fun onAttach(context: Context) {
     AndroidSupportInjection.inject(this)
@@ -97,14 +108,21 @@ class SensorsFragment : Fragment(R.layout.fragment_sensors) {
   }
 
   private fun initializeSensors() {
-    initializeGps()
+    initializeLocationSensor()
+    initializeMotionSensors()
   }
 
-  private fun initializeGps() {
-    requireGpsPermissionEnabled()
+  private fun initializeLocationSensor() {
+    enableGps()
   }
 
-  private fun requireGpsPermissionEnabled() {
+  private fun initializeMotionSensors() {
+    MOTION_SENSORS.map { motionSensorManager.getDefaultSensor(it) }.forEach {
+      motionSensorManager.registerListener(motionSensorListener, it, SensorManager.SENSOR_DELAY_NORMAL)
+    }
+  }
+
+  private fun enableGps() {
     when (PackageManager.PERMISSION_GRANTED) {
       ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) ->
         setUpLocationManager()
@@ -113,12 +131,11 @@ class SensorsFragment : Fragment(R.layout.fragment_sensors) {
   }
 
   private fun setUpLocationManager() {
-    val locationManager = requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    val gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    val gpsEnabled = locationSensorManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 
     if (gpsEnabled) {
       logger.d("GPS is enabled!")
-      requestLocationUpdates(locationManager)
+      requestLocationUpdates(locationSensorManager)
     } else {
       logger.e("GPS is NOT enabled!")
     }
@@ -129,7 +146,7 @@ class SensorsFragment : Fragment(R.layout.fragment_sensors) {
     locationManager.requestLocationUpdates(
       LocationManager.GPS_PROVIDER,
       LOCATION_TRIGGER_DISTANCE_IN_METERS,
-      LOCATION_TRIGGER_GET_DATA_EVERY_N_SECONDS,
+      LOCATION_TRIGGER_GET_DATA_INTERVAL_DURATION_IN_SECONDS,
       locationListener
     )
   }
@@ -156,5 +173,14 @@ class SensorsFragment : Fragment(R.layout.fragment_sensors) {
         Toast.LENGTH_SHORT
       ).show()
     }
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    unregisterSensorManagers()
+  }
+
+  private fun unregisterSensorManagers() {
+    motionSensorManager.unregisterListener(motionSensorListener)
   }
 }

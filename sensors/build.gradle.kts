@@ -34,6 +34,7 @@ dependencies {
   implementation(project(":base"))
   implementation(project(":components"))
   implementation(project(":core"))
+  implementation(project(":sensors-entities"))
 
   implementation(Libraries.constraintLayout)
   implementation(Libraries.material)
@@ -63,9 +64,9 @@ afterEvaluate {
     buildDir,
     "testDebugUnitTest",
     Coverage(
-      instructions = 11.68,
-      lines = 10.81,
-      complexity = 8.33,
+      instructions = 8.51,
+      lines = 7.55,
+      complexity = 6.25,
       methods = 8.70,
       classes = 16.67
     ),

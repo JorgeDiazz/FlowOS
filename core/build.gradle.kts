@@ -24,6 +24,7 @@ android {
 
 dependencies {
   implementation(project(":base"))
+  implementation(project(":sensors-entities"))
 
   implementation(Libraries.multidex)
 

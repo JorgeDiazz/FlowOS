@@ -1,5 +1,7 @@
 package com.flowos.sensors.data
 
+import com.flowos.sensors.entities.SensorMeasure
+
 data class DeviceLocationUpdateData(
   val timestamp: String,
   val boardId: String,
@@ -7,5 +9,5 @@ data class DeviceLocationUpdateData(
   val accuracy: Float,
   val bearing: Float,
   val speed: Float,
-  val sensors: List<SensorData>,
+  val sensors: List<SensorMeasure>,
 )

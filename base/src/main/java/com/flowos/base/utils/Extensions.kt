@@ -1,11 +1,6 @@
 package com.flowos.base.utils
 
-import io.reactivex.rxjava3.disposables.Disposable
 import java.lang.Enum.valueOf
-
-fun Disposable.discard() {
-  Unit
-}
 
 fun Boolean.toInt() = if (this) 1 else 0
 

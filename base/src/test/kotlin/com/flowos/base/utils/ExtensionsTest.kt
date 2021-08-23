@@ -1,8 +1,6 @@
 package com.flowos.base.utils
 
 import io.mockk.junit5.MockKExtension
-import io.reactivex.rxjava3.disposables.Disposable
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -39,18 +37,6 @@ class ExtensionsTest {
     )
   }
 
-  @Test
-  fun `Should return Unit when disposable discard is invoked`() {
-    // given
-    val testDisposable = Disposable.fromAction { }
-
-    // when
-    val returnedValue = testDisposable.discard()
-
-    // then
-    assert(returnedValue == Unit)
-  }
-
   @ParameterizedTest
   @MethodSource
   fun `Should return enum element when a string one is sent`(enumElementInString: String?, expectedValue: Vehicles?) {
@@ -73,7 +59,10 @@ class ExtensionsTest {
 
   @ParameterizedTest
   @MethodSource
-  fun `Should return Unit or null when multiLet is either activated or not respectively`(val3: String?, expectedResult: Unit?) {
+  fun `Should return Unit or null when multiLet is either activated or not respectively`(
+    val3: String?,
+    expectedResult: Unit?
+  ) {
     // given
     val val1 = "asd"
     val val2 = 512
@@ -89,7 +78,11 @@ class ExtensionsTest {
 
   @ParameterizedTest
   @MethodSource
-  fun `Should return true when value1 is greater or equal than value2`(value1: Double, value2: Double, expectedResult: Boolean) {
+  fun `Should return true when value1 is greater or equal than value2`(
+    value1: Double,
+    value2: Double,
+    expectedResult: Boolean
+  ) {
     // when
     val result = value1.isGreaterThanOrEqualTo(value2)
 

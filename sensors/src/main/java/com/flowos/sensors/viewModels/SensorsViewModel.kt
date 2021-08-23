@@ -14,6 +14,7 @@ import com.flowos.core.qualifiers.LongDateToTimestamp
 import com.flowos.sensors.data.DeviceLocationUpdateData
 import com.flowos.sensors.data.SensorsNews
 import com.flowos.sensors.data.SensorsUiModel
+import com.flowos.sensors.entities.SensorMeasure
 import javax.inject.Inject
 
 class SensorsViewModel @Inject constructor(
@@ -37,12 +38,19 @@ class SensorsViewModel @Inject constructor(
       accuracy = location.accuracy,
       bearing = location.bearing,
       speed = location.speed,
-      sensors = emptyList()
+      sensors = cache.readSensorMeasures()
     )
 
     logger.d("deviceLocationUpdateData $deviceLocationUpdateData")
 
     // TODO: publish location updates through Google Pub/Sub topic
     _news.value = Event(SensorsNews.LocationUpdatePublished)
+  }
+
+  fun cacheSensorMeasure(sensorMeasure: SensorMeasure) {
+    sensorMeasure.let {
+      it.timestamp = longDateToTimestampUseCase.execute(it.longTimestamp)
+      cache.saveSensorMeasure(it)
+    }
   }
 }

@@ -7,6 +7,7 @@ plugins {
 }
 
 dependencies {
+  implementation(project(":sensors-entities"))
 
   implementation(Libraries.kotlinJDK)
 
@@ -28,10 +29,10 @@ afterEvaluate {
     buildDir,
     "test",
     Coverage(
-      instructions = 3.89,
-      lines = 5.41,
-      complexity = 6.85,
-      methods = 5.17,
+      instructions = 3.04,
+      lines = 2.78,
+      complexity = 5.56,
+      methods = 3.51,
       classes = 5.26
     ),
     emptyList(),
