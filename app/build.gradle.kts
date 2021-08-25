@@ -112,6 +112,7 @@ dependencies {
   implementation(project(":core"))
   implementation(project(":core-test"))
   implementation(project(":sensors"))
+  implementation(project(":sensors-entities"))
 
   implementation(Libraries.multidex)
 

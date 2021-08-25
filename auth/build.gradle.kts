@@ -39,12 +39,15 @@ dependencies {
   implementation(project(":components"))
   implementation(project(":core"))
   implementation(project(":core-test"))
+  implementation(project(":sensors"))
+  implementation(project(":sensors-entities"))
 
   implementation(Libraries.multidex)
 
   implementation(Libraries.kotlinJDK)
   implementation(Libraries.appcompat)
   implementation(Libraries.activityKtx)
+  implementation(Libraries.fragmentKtx)
   implementation(Libraries.androidXCore)
   implementation(Libraries.lifeCycleCommonJava8)
   implementation(Libraries.constraintLayout)

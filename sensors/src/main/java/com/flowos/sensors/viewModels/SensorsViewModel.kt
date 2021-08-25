@@ -10,6 +10,7 @@ import com.flowos.base.others.BOARD_ID_KEY
 import com.flowos.core.BaseViewModel
 import com.flowos.core.Event
 import com.flowos.core.interfaces.AppResources
+import com.flowos.core.qualifiers.GetIsDeviceInMovement
 import com.flowos.core.qualifiers.LongDateToTimestamp
 import com.flowos.sensors.data.DeviceLocationUpdateData
 import com.flowos.sensors.data.SensorsNews
@@ -22,6 +23,7 @@ class SensorsViewModel @Inject constructor(
   private val appResources: AppResources,
   private val cache: Cache,
   @LongDateToTimestamp private val longDateToTimestampUseCase: UseCase<Long, String>,
+  @GetIsDeviceInMovement private val getIsDeviceInMovementUseCase: UseCase<SensorMeasure, Boolean>,
 ) : BaseViewModel() {
 
   private val _liveData = MutableLiveData<SensorsUiModel>()
@@ -51,6 +53,14 @@ class SensorsViewModel @Inject constructor(
     sensorMeasure.let {
       it.timestamp = longDateToTimestampUseCase.execute(it.longTimestamp)
       cache.saveSensorMeasure(it)
+    }
+  }
+
+  fun detectMovement(accelerometerSensorMeasure: SensorMeasure) {
+    val isDeviceInMovement = getIsDeviceInMovementUseCase.execute(accelerometerSensorMeasure)
+
+    if (!isDeviceInMovement) {
+      _news.value = Event(SensorsNews.NoDeviceMovement)
     }
   }
 }

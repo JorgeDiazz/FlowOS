@@ -6,4 +6,5 @@ data class SensorsUiModel(
 
 sealed class SensorsNews {
   object LocationUpdatePublished : SensorsNews()
+  object NoDeviceMovement : SensorsNews()
 }

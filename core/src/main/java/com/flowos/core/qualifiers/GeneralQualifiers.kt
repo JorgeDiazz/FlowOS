@@ -10,6 +10,9 @@ annotation class VerifyInternet
 annotation class LongDateToTimestamp
 
 @Qualifier
+annotation class GetIsDeviceInMovement
+
+@Qualifier
 annotation class GetDeviceId
 
 @Qualifier
