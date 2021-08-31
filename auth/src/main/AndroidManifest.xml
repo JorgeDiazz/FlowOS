@@ -17,7 +17,14 @@
       android:showWhenLocked="true"
       android:theme="@style/AppTheme"
       android:turnScreenOn="true"
-      android:windowSoftInputMode="adjustResize" />
+      android:windowSoftInputMode="adjustResize">
+      <intent-filter>
+        <action android:name="android.nfc.action.TAG_DISCOVERED" />
+        <action android:name="android.nfc.action.TECH_DISCOVERED" />
+
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
+    </activity>
 
   </application>
 

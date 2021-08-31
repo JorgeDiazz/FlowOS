@@ -64,11 +64,11 @@ afterEvaluate {
     buildDir,
     "testDebugUnitTest",
     Coverage(
-      instructions = 17.71,
-      lines = 15.56,
-      complexity = 12.82,
-      methods = 14.29,
-      classes = 25.00
+      instructions = 24.92,
+      lines = 25.73,
+      complexity = 18.18,
+      methods = 25.00,
+      classes = 40.00
     ),
     emptyList(),
     emptyList()

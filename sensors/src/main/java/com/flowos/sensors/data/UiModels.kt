@@ -1,7 +1,8 @@
 package com.flowos.sensors.data
 
 data class SensorsUiModel(
-  val vehicleId: String? = null
+  val vehicleId: String? = null,
+  val nfcPayload: String? = null,
 )
 
 sealed class SensorsNews {

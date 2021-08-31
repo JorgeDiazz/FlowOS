@@ -13,6 +13,9 @@ annotation class LongDateToTimestamp
 annotation class GetIsDeviceInMovement
 
 @Qualifier
+annotation class GetNfcPayloadFromNfcMeasure
+
+@Qualifier
 annotation class GetDeviceId
 
 @Qualifier

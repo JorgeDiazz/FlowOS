@@ -1,9 +1,12 @@
 package com.flowos.auth
 
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorManager
+import android.nfc.NfcAdapter
+import android.nfc.Tag
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +26,7 @@ import com.flowos.components.utils.viewBinding
 import com.flowos.core.Event
 import com.flowos.core.EventObserver
 import com.flowos.sensors.data.SensorsNews
+import com.flowos.sensors.data.SensorsUiModel
 import com.flowos.sensors.listeners.MotionSensorListener
 import com.flowos.sensors.viewModels.SensorsViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -54,6 +58,8 @@ class LoginActivity : AppCompatActivity() {
 
   private val binding by viewBinding(ActivityLoginBinding::inflate)
 
+  private var nfcAdapter: NfcAdapter? = null
+
   private var indefiniteErrorSnackbar: Snackbar? = null
 
   private val motionSensorManager by lazy { getSystemService(Context.SENSOR_SERVICE) as SensorManager }
@@ -77,20 +83,46 @@ class LoginActivity : AppCompatActivity() {
     setContentView(binding.root)
 
     setUpView()
-    setUpNfcSensor()
     setUpMotionDetector()
+    initializeSensorsObserver()
     initializeSubscription()
     initializeSensorsSubscription()
   }
 
-  private fun setUpNfcSensor() {
-    val nfcTagMessage: String? = readNfcTag()
-
-    nfcTagMessage?.let {
-      hidePlaceInDeviceErrorSnackbar()
-    } ?: run {
-      showPlaceInDeviceErrorSnackbar()
+  private fun setUpView() {
+    binding.apply {
+      buttonContinue.setOnClickListener {
+        val driverId = textFieldDriverId.editText?.text.toString()
+        val boardId = textFieldRunningBoardId.editText?.text.toString()
+        viewModel.loginUser(driverId, boardId)
+      }
     }
+
+    showPlaceInDeviceErrorSnackbar()
+  }
+
+  override fun onNewIntent(intent: Intent) {
+    super.onNewIntent(intent)
+    setIntent(intent)
+    resolveIntent(intent)
+  }
+
+  private fun resolveIntent(intent: Intent) {
+    when (intent.action) {
+      NfcAdapter.ACTION_TAG_DISCOVERED,
+      NfcAdapter.ACTION_TECH_DISCOVERED,
+      NfcAdapter.ACTION_NDEF_DISCOVERED -> {
+        resolveNfcIntent(intent)
+        hidePlaceInDeviceErrorSnackbar()
+      }
+    }
+  }
+
+  private fun resolveNfcIntent(intent: Intent) {
+    val extraTag: Tag? = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG) as Tag?
+    val ndefMessages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
+
+    sensorsViewModel.getNfcPayload(extraTag, ndefMessages)
   }
 
   private fun showPlaceInDeviceErrorSnackbar() {
@@ -108,14 +140,21 @@ class LoginActivity : AppCompatActivity() {
     binding.buttonContinue.isEnabled = true
   }
 
-  private fun readNfcTag(): String? {
-    // It will be addressed in another ticket
-    return null
-  }
-
   private fun setUpMotionDetector() {
     val accelerometerSensor = motionSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
     motionSensorManager.registerListener(motionSensorListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL)
+  }
+
+  private fun initializeSensorsObserver() {
+    sensorsViewModel.liveData.observeForever {
+      observeSensorsData(it)
+    }
+  }
+
+  private fun observeSensorsData(uiModel: SensorsUiModel) {
+    uiModel.nfcPayload?.let {
+      sensorsViewModel.cacheNfcPayload(it)
+    }
   }
 
   private fun initializeSensorsSubscription() {
@@ -158,25 +197,35 @@ class LoginActivity : AppCompatActivity() {
     }
   }
 
-  private fun setUpView() {
-    binding.apply {
-      buttonContinue.setOnClickListener {
-        val driverId = textFieldDriverId.editText?.text.toString()
-        val boardId = textFieldRunningBoardId.editText?.text.toString()
-        viewModel.loginUser(driverId, boardId)
-      }
-    }
-  }
-
   private fun isAccelerometerMeasuresIntervalAvailable(currentTime: Long): Boolean {
     val elapsedTimeInSeconds = (currentTime - lastTimeAccelerometerMeasuresProcessed) / 1000
     return elapsedTimeInSeconds > ACCELEROMETER_MEASURES_PROCESSING_INTERVAL_IN_SECONDS
   }
 
+  override fun onResume() {
+    super.onResume()
+    setUpNfcSensor()
+  }
+
+  private fun setUpNfcSensor() {
+    nfcAdapter = NfcAdapter.getDefaultAdapter(this)
+
+    val nfcPendingIntent = PendingIntent.getActivity(
+      this, 0,
+      Intent(this, this.javaClass)
+        .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
+      0
+    )
+
+    nfcAdapter?.enableForegroundDispatch(this, nfcPendingIntent, null, null)
+  }
+
   override fun onDestroy() {
     super.onDestroy()
+
     unregisterSensorManagers()
     removeSensorsEventObserver()
+    disableNfcForegroundDispatch()
   }
 
   private fun unregisterSensorManagers() {
@@ -185,5 +234,13 @@ class LoginActivity : AppCompatActivity() {
 
   private fun removeSensorsEventObserver() {
     sensorsViewModel.news.removeObserver(sensorsEventObserver)
+  }
+
+  private fun disableNfcForegroundDispatch() {
+    nfcAdapter?.disableForegroundDispatch(this)
+  }
+
+  override fun onBackPressed() {
+    // no-op by default
   }
 }
