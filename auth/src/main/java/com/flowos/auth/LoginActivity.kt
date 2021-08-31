@@ -54,6 +54,8 @@ class LoginActivity : AppCompatActivity() {
 
   private val binding by viewBinding(ActivityLoginBinding::inflate)
 
+  private var indefiniteErrorSnackbar: Snackbar? = null
+
   private val motionSensorManager by lazy { getSystemService(Context.SENSOR_SERVICE) as SensorManager }
 
   private var lastTimeAccelerometerMeasuresProcessed: Long = Calendar.getInstance().time.time
@@ -75,9 +77,40 @@ class LoginActivity : AppCompatActivity() {
     setContentView(binding.root)
 
     setUpView()
+    setUpNfcSensor()
     setUpMotionDetector()
     initializeSubscription()
     initializeSensorsSubscription()
+  }
+
+  private fun setUpNfcSensor() {
+    val nfcTagMessage: String? = readNfcTag()
+
+    nfcTagMessage?.let {
+      hidePlaceInDeviceErrorSnackbar()
+    } ?: run {
+      showPlaceInDeviceErrorSnackbar()
+    }
+  }
+
+  private fun showPlaceInDeviceErrorSnackbar() {
+    indefiniteErrorSnackbar = makeErrorSnackbar(
+      binding.root,
+      getString(R.string.place_device_in_vehicle_to_start),
+      Snackbar.LENGTH_INDEFINITE
+    ).apply { show() }
+
+    binding.buttonContinue.isEnabled = false
+  }
+
+  private fun hidePlaceInDeviceErrorSnackbar() {
+    indefiniteErrorSnackbar?.dismiss()
+    binding.buttonContinue.isEnabled = true
+  }
+
+  private fun readNfcTag(): String? {
+    // It will be addressed in another ticket
+    return null
   }
 
   private fun setUpMotionDetector() {

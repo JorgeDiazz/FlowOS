@@ -6,6 +6,7 @@
   <string name="start_shift_button">Start Shift</string>
   <string name="welcome_title">Welcome</string>
   <string name="have_a_safe_journey">Have a \nsafe journey!</string>
-  <string name="error_when_trying_to_login">Error when trying to login</string>
+  <string name="error_when_trying_to_login">Error when trying to log in</string>
   <string name="board_id_does_not_exist">The Board ID specified does not exist</string>
+  <string name="place_device_in_vehicle_to_start">Place device in vehicle to start</string>
 </resources>
