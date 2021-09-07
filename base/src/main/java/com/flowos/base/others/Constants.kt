@@ -3,6 +3,7 @@ package com.flowos.base.others
 // time
 const val ONE_SECOND_IN_MILLISECONDS = 1_000L
 const val FIVE_SECONDS_IN_MILLISECONDS = 5_000L
+const val THIRTY_SECONDS_IN_MILLISECONDS = 30_000L
 
 // cache keys
 const val DRIVER_ID_KEY = "DRIVER_ID_KEY"

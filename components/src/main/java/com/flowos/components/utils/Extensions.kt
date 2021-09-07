@@ -58,6 +58,23 @@ fun Activity.turnScreenOn() {
   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
     setTurnScreenOn(true)
     setShowWhenLocked(true)
+
+    (getSystemService(KeyguardManager::class.java) as KeyguardManager).requestDismissKeyguard(
+      this,
+      object : KeyguardManager.KeyguardDismissCallback() {
+        override fun onDismissCancelled() {
+          // no-op by default
+        }
+
+        override fun onDismissError() {
+          // no-op by default
+        }
+
+        override fun onDismissSucceeded() {
+          // no-op by default
+        }
+      }
+    )
   } else {
     this.window.addFlags(
       WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
@@ -66,27 +83,16 @@ fun Activity.turnScreenOn() {
   }
 
   window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-
-  (getSystemService(KeyguardManager::class.java) as KeyguardManager).requestDismissKeyguard(
-    this,
-    object : KeyguardManager.KeyguardDismissCallback() {
-      override fun onDismissCancelled() {
-        // no-op by default
-      }
-
-      override fun onDismissError() {
-        // no-op by default
-      }
-
-      override fun onDismissSucceeded() {
-        // no-op by default
-      }
-    }
-  )
 }
 
 fun Activity.isConnectedToPower(): Boolean {
   val intent = registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+  val plugged = intent?.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1)
+  return plugged == BatteryManager.BATTERY_PLUGGED_AC || plugged == BatteryManager.BATTERY_PLUGGED_USB || plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS
+}
+
+fun Fragment.isConnectedToPower(): Boolean {
+  val intent = activity?.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
   val plugged = intent?.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1)
   return plugged == BatteryManager.BATTERY_PLUGGED_AC || plugged == BatteryManager.BATTERY_PLUGGED_USB || plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS
 }

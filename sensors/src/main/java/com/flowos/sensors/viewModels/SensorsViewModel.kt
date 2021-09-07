@@ -36,6 +36,10 @@ class SensorsViewModel @Inject constructor(
   private val _news = MutableLiveData<Event<SensorsNews>>()
   val news: LiveData<Event<SensorsNews>> = _news
 
+  fun onViewActive() {
+    _liveData.value = SensorsUiModel(vehicleId = getNfcPayloadFromCache())
+  }
+
   fun sendDeviceLocationUpdate(location: Location) {
     val deviceLocationUpdateData = DeviceLocationUpdateData(
       timestamp = longDateToTimestampUseCase.execute(location.time),
@@ -75,6 +79,9 @@ class SensorsViewModel @Inject constructor(
 
     _liveData.value = SensorsUiModel(nfcPayload = payload)
   }
+
+  private fun getNfcPayloadFromCache(): String? =
+    cache.readString(NFC_PAYLOAD_KEY)
 
   fun cacheNfcPayload(nfcPayload: String) {
     cache.saveString(NFC_PAYLOAD_KEY, nfcPayload)

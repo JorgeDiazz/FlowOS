@@ -2,6 +2,11 @@ package com.flowos.sensors
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.le.BluetoothLeScanner
+import android.bluetooth.le.ScanCallback
+import android.bluetooth.le.ScanResult
+import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.content.pm.PackageManager
 import android.hardware.Sensor
@@ -18,6 +23,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.flowos.base.interfaces.Logger
 import com.flowos.base.others.FIVE_SECONDS_IN_MILLISECONDS
+import com.flowos.base.others.THIRTY_SECONDS_IN_MILLISECONDS
+import com.flowos.components.utils.isConnectedToPower
 import com.flowos.components.utils.viewBinding
 import com.flowos.core.EventObserver
 import com.flowos.sensors.data.SensorsNews
@@ -26,10 +33,16 @@ import com.flowos.sensors.databinding.FragmentSensorsBinding
 import com.flowos.sensors.listeners.MotionSensorListener
 import com.flowos.sensors.viewModels.SensorsViewModel
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val LOCATION_TRIGGER_DISTANCE_IN_METERS: Long = 1
 private const val LOCATION_TRIGGER_GET_DATA_INTERVAL_DURATION_IN_SECONDS: Float = FIVE_SECONDS_IN_MILLISECONDS.toFloat()
+
+private const val BLUETOOTH_LOW_ENERGY_SCAN_INTERVAL_IN_SECONDS = THIRTY_SECONDS_IN_MILLISECONDS
 
 private val MOTION_SENSORS = arrayOf(Sensor.TYPE_ACCELEROMETER, Sensor.TYPE_LINEAR_ACCELERATION, Sensor.TYPE_GYROSCOPE)
 
@@ -56,8 +69,37 @@ class SensorsFragment : Fragment(R.layout.fragment_sensors) {
       }
     }
 
+  private val bleRequestPermissionLauncher =
+    registerForActivityResult(
+      ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+      if (isGranted) {
+        setUpBluetoothLowEnergy()
+      } else {
+        showPermissionRequiredMessage()
+        initializeBluetoothLowEnergySensor()
+      }
+    }
+
   private val locationListener = LocationListener {
     viewModel.sendDeviceLocationUpdate(it)
+  }
+
+  private val oldBleDevices = LinkedHashSet<String>()
+  private val newBleDevices = LinkedHashSet<String>()
+
+  private val bleScannerCallback: ScanCallback = object : ScanCallback() {
+    override fun onScanResult(callbackType: Int, result: ScanResult) {
+      newBleDevices.add(result.device.address)
+    }
+
+    override fun onBatchScanResults(results: List<ScanResult?>?) {
+      logger.d("BLE Batch Scan Results received! $results")
+    }
+
+    override fun onScanFailed(errorCode: Int) {
+      logger.e("BLE scan failed! Error code: $errorCode")
+    }
   }
 
   @Inject
@@ -84,9 +126,14 @@ class SensorsFragment : Fragment(R.layout.fragment_sensors) {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
+    initializeViewModel()
     initializeObserver()
     initializeSubscription()
     initializeSensors()
+  }
+
+  private fun initializeViewModel() {
+    viewModel.onViewActive()
   }
 
   private fun initializeObserver() {
@@ -110,6 +157,7 @@ class SensorsFragment : Fragment(R.layout.fragment_sensors) {
   private fun initializeSensors() {
     initializeLocationSensor()
     initializeMotionSensors()
+    initializeBluetoothLowEnergySensor()
   }
 
   private fun initializeLocationSensor() {
@@ -120,6 +168,65 @@ class SensorsFragment : Fragment(R.layout.fragment_sensors) {
     MOTION_SENSORS.map { motionSensorManager.getDefaultSensor(it) }.forEach {
       motionSensorManager.registerListener(motionSensorListener, it, SensorManager.SENSOR_DELAY_NORMAL)
     }
+  }
+
+  private fun initializeBluetoothLowEnergySensor() {
+    enableBluetoothLowEnergy()
+  }
+
+  private fun enableBluetoothLowEnergy() {
+    when (PackageManager.PERMISSION_GRANTED) {
+      ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.BLUETOOTH_ADMIN) ->
+        setUpBluetoothLowEnergy()
+      else -> bleRequestPermissionLauncher.launch(Manifest.permission.BLUETOOTH_ADMIN)
+    }
+  }
+
+  private fun setUpBluetoothLowEnergy() {
+    BluetoothAdapter.getDefaultAdapter()?.let { bleAdapter ->
+      bleAdapter.bluetoothLeScanner?.let { bleScanner ->
+        val bleScannerSettings = ScanSettings.Builder()
+          .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
+          .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
+          .setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE)
+          .setNumOfMatches(ScanSettings.MATCH_NUM_ONE_ADVERTISEMENT)
+          .setReportDelay(0L)
+          .build()
+
+        scheduleBluetoothLowEnergyScanProcess(bleScanner, bleScannerSettings)
+      } ?: kotlin.run {
+        logger.e("Error getting BLE Scanner")
+      }
+    }
+  }
+
+  @SuppressLint("MissingPermission")
+  private fun scheduleBluetoothLowEnergyScanProcess(bleScanner: BluetoothLeScanner, bleScannerSettings: ScanSettings?) {
+    CoroutineScope(Dispatchers.Main.immediate).launch {
+      if (isConnectedToPower()) {
+        bleScanner.startScan(null, bleScannerSettings, bleScannerCallback)
+        logger.d("BLE Scanner started!")
+
+        delay(BLUETOOTH_LOW_ENERGY_SCAN_INTERVAL_IN_SECONDS)
+        bleScanner.stopScan(bleScannerCallback)
+        logger.d("BLE Scanner stopped!")
+
+        updateBleDevicesLists()
+        delay(BLUETOOTH_LOW_ENERGY_SCAN_INTERVAL_IN_SECONDS / 2)
+      }
+
+      scheduleBluetoothLowEnergyScanProcess(bleScanner, bleScannerSettings)
+    }
+  }
+
+  private fun updateBleDevicesLists() {
+    logger.d("BLE devices discovered: $newBleDevices")
+    logger.d("BLE devices added: ${newBleDevices.filterNot { oldBleDevices.contains(it) }}")
+    logger.d("BLE devices removed: ${oldBleDevices.filterNot { newBleDevices.contains(it) }}")
+
+    oldBleDevices.clear()
+    oldBleDevices.addAll(newBleDevices)
+    newBleDevices.clear()
   }
 
   private fun enableGps() {

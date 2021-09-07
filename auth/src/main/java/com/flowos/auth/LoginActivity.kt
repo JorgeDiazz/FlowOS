@@ -8,6 +8,7 @@ import android.hardware.SensorManager
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -154,6 +155,8 @@ class LoginActivity : AppCompatActivity() {
   private fun observeSensorsData(uiModel: SensorsUiModel) {
     uiModel.nfcPayload?.let {
       sensorsViewModel.cacheNfcPayload(it)
+
+      Toast.makeText(this, "Vehicle id: $it", Toast.LENGTH_LONG).show()
     }
   }
 
@@ -180,7 +183,10 @@ class LoginActivity : AppCompatActivity() {
 
   private fun handleNews(news: LoginNews) {
     when (news) {
-      is LoginNews.LoginSuccessful -> startWelcomeActivity(news.driverData)
+      is LoginNews.LoginSuccessful -> {
+        disableNfcForegroundDispatch()
+        startWelcomeActivity(news.driverData)
+      }
       is LoginNews.ShowErrorNews -> makeErrorSnackbar(
         binding.root,
         news.message,
@@ -225,7 +231,6 @@ class LoginActivity : AppCompatActivity() {
 
     unregisterSensorManagers()
     removeSensorsEventObserver()
-    disableNfcForegroundDispatch()
   }
 
   private fun unregisterSensorManagers() {

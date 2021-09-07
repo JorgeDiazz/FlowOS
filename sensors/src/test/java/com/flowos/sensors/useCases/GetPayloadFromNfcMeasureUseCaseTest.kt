@@ -1,7 +1,7 @@
 package com.flowos.sensors.useCases
 
 import android.nfc.Tag
-import android.nfc.tech.NdefFormatable
+import android.nfc.tech.Ndef
 import com.flowos.base.interfaces.UseCase
 import com.flowos.sensors.data.NfcMeasure
 import io.mockk.every
@@ -28,8 +28,8 @@ class GetPayloadFromNfcMeasureUseCaseTest {
     val tag = mockk<Tag>()
     val nfcMeasure = NfcMeasure(tag, null)
 
-    mockkStatic("android.nfc.tech.NdefFormatable")
-    every { NdefFormatable.get(any()) } returns mockk(relaxed = true)
+    mockkStatic("android.nfc.tech.Ndef")
+    every { Ndef.get(any()) } returns mockk(relaxed = true)
 
     // when
     val payload = useCase.execute(nfcMeasure)

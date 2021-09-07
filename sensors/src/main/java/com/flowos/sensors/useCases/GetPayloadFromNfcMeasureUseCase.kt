@@ -1,7 +1,7 @@
 package com.flowos.sensors.useCases
 
 import android.nfc.NdefMessage
-import android.nfc.tech.NdefFormatable
+import android.nfc.tech.Ndef
 import com.flowos.base.interfaces.UseCase
 import com.flowos.sensors.data.NfcMeasure
 import javax.inject.Inject
@@ -9,7 +9,7 @@ import javax.inject.Inject
 class GetPayloadFromNfcMeasureUseCase @Inject constructor() : UseCase<NfcMeasure, String>() {
 
   override fun execute(input: NfcMeasure): String {
-    val ndef = NdefFormatable.get(input.tag)
+    val ndef = Ndef.get(input.tag)
 
     ndef.use {
       it.connect()
@@ -23,7 +23,7 @@ class GetPayloadFromNfcMeasureUseCase @Inject constructor() : UseCase<NfcMeasure
         ""
       } else {
         val record = ndefMessages.first()?.records?.first()
-        record?.payload.toString()
+        record?.payload?.decodeToString().orEmpty().split(" ").last()
       }
     }
   }
