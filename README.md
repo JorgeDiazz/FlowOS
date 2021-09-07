@@ -3,10 +3,10 @@
 
  [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=celerik_android-kotlin-boilerplate&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=celerik_android-kotlin-boilerplate) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=celerik_android-kotlin-boilerplate&metric=code_smells)](https://sonarcloud.io/dashboard?id=celerik_android-kotlin-boilerplate) [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=celerik_android-kotlin-boilerplate&metric=ncloc)](https://sonarcloud.io/dashboard?id=celerik_android-kotlin-boilerplate)
 
-# Welcome to Android Kotlin Boilerplate!  
+# Welcome to FlowOS Android App!  
   
 ## Getting Started  
-Android Kotlin Boilerplate refers to standardized methods, procedures and files that may be used over again for efficiency developing new Android mobile applications.  
+This project uses Android Kotlin Boilerplate, which it refers to standardized methods, procedures and files that may be used over again for efficiency developing new Android mobile applications.  
   
 ## What's included  
 * An Android app with _modular architecture_ and _MVVM_ architectural pattern.
@@ -30,7 +30,7 @@ Android Kotlin Boilerplate refers to standardized methods, procedures and files 
 ## Installation  
 Clone this repository and import it into **Android Studio**  
 ```bash  
-git clone https://github.com/celerik/android-kotlin-boilerplate.git  
+git clone https://celerik@dev.azure.com/celerik/FlowOS/_git/flowos-app 
 ```  
   
 ## Build variants  
@@ -68,8 +68,4 @@ In order to sign your debug app build using _debug-keystore.jks_ keystore, these
 1. Project's CodeStyle can be found [here](docs/codestyle.md).  
 2. Project utilities file can be found [here](docs/utilities.md).
 3. CI/CD documentation can be found [here](docs/cicd.md).  
-
-## Screenshots  
-  
-![Screenshot_1626474458](https://user-images.githubusercontent.com/25390317/126014560-dbd18cf5-75f9-4e0a-a72e-9b63e6db0bf4.png)
-![Screenshot_1626474925](https://user-images.githubusercontent.com/25390317/126014713-1c25cf42-7307-4d05-b121-5be96abdf1a4.png)
+4. FlowOS 1st Phase documentation can be found [here](docs/1st_phase).
