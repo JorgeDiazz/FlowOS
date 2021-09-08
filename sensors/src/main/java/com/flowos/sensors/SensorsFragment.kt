@@ -7,12 +7,16 @@ import android.bluetooth.le.BluetoothLeScanner
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.location.LocationListener
 import android.location.LocationManager
+import android.os.BatteryManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -24,7 +28,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.flowos.base.interfaces.Logger
 import com.flowos.base.others.FIVE_SECONDS_IN_MILLISECONDS
 import com.flowos.base.others.THIRTY_SECONDS_IN_MILLISECONDS
-import com.flowos.components.utils.isConnectedToPower
 import com.flowos.components.utils.viewBinding
 import com.flowos.core.EventObserver
 import com.flowos.sensors.data.SensorsNews
@@ -112,11 +115,20 @@ class SensorsFragment : Fragment(R.layout.fragment_sensors) {
 
   private val binding by viewBinding(FragmentSensorsBinding::bind)
 
-  private val locationSensorManager by lazy { requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager }
+  private val locationManager by lazy { requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager }
 
   private val motionSensorManager by lazy { requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager }
 
   private val motionSensorListener = MotionSensorListener { viewModel.cacheSensorMeasure(it) }
+
+  private val batteryChangedReceiver = object : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+      when (intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1)) {
+        BatteryManager.BATTERY_PLUGGED_AC, BatteryManager.BATTERY_PLUGGED_USB, BatteryManager.BATTERY_PLUGGED_WIRELESS -> initializeSensors()
+        else -> unregisterSensorManagers()
+      }
+    }
+  }
 
   override fun onAttach(context: Context) {
     AndroidSupportInjection.inject(this)
@@ -129,7 +141,7 @@ class SensorsFragment : Fragment(R.layout.fragment_sensors) {
     initializeViewModel()
     initializeObserver()
     initializeSubscription()
-    initializeSensors()
+    initializeBatteryChangedReceiver()
   }
 
   private fun initializeViewModel() {
@@ -152,6 +164,10 @@ class SensorsFragment : Fragment(R.layout.fragment_sensors) {
         handleNews(it)
       }
     )
+  }
+
+  private fun initializeBatteryChangedReceiver() {
+    requireActivity().registerReceiver(batteryChangedReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
   }
 
   private fun initializeSensors() {
@@ -203,20 +219,18 @@ class SensorsFragment : Fragment(R.layout.fragment_sensors) {
   @SuppressLint("MissingPermission")
   private fun scheduleBluetoothLowEnergyScanProcess(bleScanner: BluetoothLeScanner, bleScannerSettings: ScanSettings?) {
     CoroutineScope(Dispatchers.Main.immediate).launch {
-      if (isConnectedToPower()) {
-        bleScanner.startScan(null, bleScannerSettings, bleScannerCallback)
-        logger.d("BLE Scanner started!")
+      bleScanner.startScan(null, bleScannerSettings, bleScannerCallback)
+      logger.d("BLE Scanner started!")
 
-        delay(BLUETOOTH_LOW_ENERGY_SCAN_INTERVAL_IN_SECONDS)
-        bleScanner.stopScan(bleScannerCallback)
-        logger.d("BLE Scanner stopped!")
+      delay(BLUETOOTH_LOW_ENERGY_SCAN_INTERVAL_IN_SECONDS)
+      bleScanner.stopScan(bleScannerCallback)
+      logger.d("BLE Scanner stopped!")
 
-        updateBleDevicesLists()
-        delay(BLUETOOTH_LOW_ENERGY_SCAN_INTERVAL_IN_SECONDS / 2)
-      }
-
-      scheduleBluetoothLowEnergyScanProcess(bleScanner, bleScannerSettings)
+      updateBleDevicesLists()
+      delay(BLUETOOTH_LOW_ENERGY_SCAN_INTERVAL_IN_SECONDS / 2)
     }
+
+    scheduleBluetoothLowEnergyScanProcess(bleScanner, bleScannerSettings)
   }
 
   private fun updateBleDevicesLists() {
@@ -238,11 +252,11 @@ class SensorsFragment : Fragment(R.layout.fragment_sensors) {
   }
 
   private fun setUpLocationManager() {
-    val gpsEnabled = locationSensorManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    val gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 
     if (gpsEnabled) {
       logger.d("GPS is enabled!")
-      requestLocationUpdates(locationSensorManager)
+      requestLocationUpdates(locationManager)
     } else {
       logger.e("GPS is NOT enabled!")
     }
@@ -289,5 +303,6 @@ class SensorsFragment : Fragment(R.layout.fragment_sensors) {
 
   private fun unregisterSensorManagers() {
     motionSensorManager.unregisterListener(motionSensorListener)
+    locationManager.removeUpdates(locationListener)
   }
 }
