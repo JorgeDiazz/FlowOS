@@ -4,7 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/glossy_green"
+  android:background="@color/white"
   tools:context=".WelcomeActivity">
 
   <androidx.constraintlayout.widget.Guideline
@@ -23,7 +23,7 @@
     android:fontFamily="@font/montserrat_medium"
     android:gravity="start"
     android:text="@string/welcome_title"
-    android:textColor="@color/white"
+    android:textColor="@color/red"
     android:textSize="38sp"
     app:layout_constraintTop_toBottomOf="@id/guideline" />
 
@@ -34,7 +34,7 @@
     android:layout_marginEnd="@dimen/spacing_large_300"
     android:fontFamily="@font/montserrat_bold"
     android:gravity="end"
-    android:textColor="@color/white"
+    android:textColor="@color/red"
     android:textSize="38sp"
     app:layout_constraintTop_toBottomOf="@id/textView_title"
     tools:text="[Driver name]" />
@@ -55,7 +55,7 @@
     android:fontFamily="@font/montserrat_medium"
     android:gravity="center"
     android:text="@string/have_a_safe_journey"
-    android:textColor="@color/white"
+    android:textColor="@color/red"
     android:textSize="48sp"
     app:layout_constraintTop_toBottomOf="@id/guideline_1"
     tools:text="Have a safe journey!" />
