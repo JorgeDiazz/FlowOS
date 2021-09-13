@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import com.flowos.app.databinding.ActivityMainBinding
 import com.flowos.base.interfaces.Logger
 import com.flowos.components.utils.viewBinding
-import com.flowos.sensors.SensorsFragment
+import com.flowos.sensors.HomeFragment
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(binding.root)
 
-    loadFragment(SensorsFragment.newInstance())
+    loadFragment(HomeFragment.newInstance())
   }
 
   private fun loadFragment(

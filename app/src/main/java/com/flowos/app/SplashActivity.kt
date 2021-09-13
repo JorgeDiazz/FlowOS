@@ -12,10 +12,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.flowos.app.data.SplashNews
 import com.flowos.app.databinding.ActivitySplashBinding
 import com.flowos.app.viewModels.SplashViewModel
+import com.flowos.app.workers.SensorsService
 import com.flowos.auth.LoginActivity
 import com.flowos.base.interfaces.Logger
 import com.flowos.base.others.ONE_SECOND_IN_MILLISECONDS
@@ -62,7 +64,13 @@ class SplashActivity : AppCompatActivity() {
     showVersionName()
 
     initializeLockTaskMode()
+    initializeSensorsService()
     initializeSubscription()
+  }
+
+  private fun initializeSensorsService() {
+    val serviceIntent = Intent(this, SensorsService::class.java)
+    ContextCompat.startForegroundService(this, serviceIntent)
   }
 
   private fun initializeLockTaskMode() {

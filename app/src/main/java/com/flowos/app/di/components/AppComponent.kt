@@ -13,6 +13,7 @@ import com.flowos.app.di.modules.LoggerModule
 import com.flowos.app.di.modules.NetworkModule
 import com.flowos.app.di.modules.NetworkServicesModule
 import com.flowos.app.di.modules.RepositoriesModule
+import com.flowos.app.di.modules.ServiceModule
 import com.flowos.core.CoreComponent
 import dagger.BindsInstance
 import dagger.Component
@@ -32,6 +33,7 @@ import javax.inject.Singleton
     NetworkServicesModule::class,
     ActivityModule::class,
     FragmentModule::class,
+    ServiceModule::class,
     LoggerModule::class,
     RepositoriesModule::class,
     FlowOSAppModule::class,

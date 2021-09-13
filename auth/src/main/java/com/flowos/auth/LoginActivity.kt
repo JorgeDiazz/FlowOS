@@ -35,7 +35,7 @@ import dagger.android.AndroidInjection
 import java.util.Calendar
 import javax.inject.Inject
 
-private const val ACCELEROMETER_MEASURES_PROCESSING_INTERVAL_IN_SECONDS = 5
+private const val ACCELEROMETER_MEASURES_PROCESSING_INTERVAL_IN_SECONDS = 15
 
 /**
  * Represents login activity.
@@ -99,7 +99,7 @@ class LoginActivity : AppCompatActivity() {
       }
     }
 
-    showPlaceInDeviceErrorSnackbar()
+    // showPlaceInDeviceErrorSnackbar()
   }
 
   override fun onNewIntent(intent: Intent) {

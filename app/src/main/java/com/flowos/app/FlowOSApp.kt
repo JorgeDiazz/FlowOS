@@ -13,6 +13,10 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
+/**
+ * Represents FlowOS application.
+ *
+ */
 open class FlowOSApp : CoreApp(), HasAndroidInjector {
 
   private lateinit var appComponent: AppComponent
@@ -28,7 +32,7 @@ open class FlowOSApp : CoreApp(), HasAndroidInjector {
     super.onCreate()
 
     initializeComponent()
-    ProcessLifecycleOwner.get().lifecycle.addObserver(viewModel)
+    initializeViewModel()
   }
 
   private fun initializeComponent() {
@@ -37,6 +41,10 @@ open class FlowOSApp : CoreApp(), HasAndroidInjector {
       .build()
 
     appComponent.inject(this)
+  }
+
+  private fun initializeViewModel() {
+    ProcessLifecycleOwner.get().lifecycle.addObserver(viewModel)
   }
 
   override fun androidInjector(): AndroidInjector<Any> {
