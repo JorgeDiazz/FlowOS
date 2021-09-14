@@ -22,6 +22,8 @@
 
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
   <uses-feature
     android:name="android.hardware.bluetooth_le"
     android:required="true" />
@@ -56,6 +58,20 @@
       </intent-filter>
     </receiver>
 
+    <receiver
+      android:name=".receivers.AppStartupReceiver"
+      android:enabled="true"
+      android:exported="true"
+      android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+      <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+        <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
+
+    </receiver>
+
     <activity
       android:name=".SplashActivity"
       android:lockTaskMode="if_whitelisted"
@@ -64,6 +80,7 @@
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
+        <category android:name="android.intent.category.HOME"/>
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>

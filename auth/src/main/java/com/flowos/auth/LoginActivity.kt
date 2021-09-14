@@ -99,7 +99,7 @@ class LoginActivity : AppCompatActivity() {
       }
     }
 
-    // showPlaceInDeviceErrorSnackbar()
+    showPlaceInDeviceErrorSnackbar()
   }
 
   override fun onNewIntent(intent: Intent) {
