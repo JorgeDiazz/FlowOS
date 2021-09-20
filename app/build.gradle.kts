@@ -112,6 +112,7 @@ dependencies {
   implementation(project(":core"))
   implementation(project(":core-test"))
   implementation(project(":sensors"))
+  implementation(project(":sensors-domain"))
   implementation(project(":sensors-entities"))
 
   implementation(Libraries.multidex)
@@ -134,6 +135,8 @@ dependencies {
   implementation(Libraries.dagger)
   implementation(Libraries.daggerAndroid)
   implementation(Libraries.daggerAndroidSupport)
+
+  implementation(Libraries.room)
 
   implementation(Libraries.glide)
 
@@ -165,6 +168,7 @@ dependencies {
   releaseImplementation(Libraries.okReplayNoop)
   androidTestImplementation(Libraries.okReplayEspresso)
 
+  androidTestImplementation(Libraries.roomTesting)
   androidTestImplementation(Libraries.jUnitExtKtx)
   androidTestImplementation(Libraries.testCoreKtx)
   androidTestImplementation(Libraries.androidXRunner)
@@ -208,8 +212,8 @@ afterEvaluate {
     "testStagingInternalDebugUnitTest",
     Coverage(
       instructions = 13.41,
-      lines = 14.91,
-      complexity = 11.81,
+      lines = 14.66,
+      complexity = 11.72,
       methods = 14.02,
       classes = 18.92
     ),

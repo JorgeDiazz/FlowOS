@@ -55,13 +55,13 @@ class ServerInterceptor @Inject constructor(private val logger: Logger) : Interc
     } catch (serverException: ServerException) {
       throw serverException
     } catch (_: UnknownHostException) {
-      throw NoConnectionException
+      throw NoConnectionException()
     } catch (_: SocketTimeoutException) {
-      throw NoConnectionException
+      throw NoConnectionException()
     } catch (_: NoConnectionException) {
-      throw NoConnectionException
+      throw NoConnectionException()
     } catch (_: IOException) {
-      throw NoConnectionException
+      throw NoConnectionException()
     } catch (e: Exception) {
       throw ServerException("Network Issue", e.message.orEmpty())
     }

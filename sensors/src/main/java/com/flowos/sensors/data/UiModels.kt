@@ -8,4 +8,5 @@ data class SensorsUiModel(
 sealed class SensorsNews {
   object LocationUpdatePublished : SensorsNews()
   object NoDeviceMovement : SensorsNews()
+  data class ShowErrorNews(val errorMessage: String) : SensorsNews()
 }

@@ -124,6 +124,12 @@ class SensorsService : Service() {
         R.string.location_update_published_message,
         Toast.LENGTH_LONG
       ).show()
+
+      is SensorsNews.ShowErrorNews -> Toast.makeText(
+        appContext,
+        news.errorMessage,
+        Toast.LENGTH_LONG
+      ).show()
     }
   }
 

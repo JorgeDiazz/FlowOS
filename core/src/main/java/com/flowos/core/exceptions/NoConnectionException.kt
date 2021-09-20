@@ -2,4 +2,4 @@ package com.flowos.core.exceptions
 
 import java.io.IOException
 
-object NoConnectionException : IOException()
+class NoConnectionException(override val message: String = "No connection exception") : IOException()

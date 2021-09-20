@@ -1,6 +1,4 @@
-package com.flowos.sensors.data
-
-import com.flowos.sensors.entities.SensorMeasure
+package com.flowos.sensors.entities
 
 data class DeviceLocationUpdateData(
   val timestamp: String,

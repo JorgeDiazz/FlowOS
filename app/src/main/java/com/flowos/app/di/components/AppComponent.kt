@@ -15,6 +15,7 @@ import com.flowos.app.di.modules.NetworkServicesModule
 import com.flowos.app.di.modules.RepositoriesModule
 import com.flowos.app.di.modules.ServiceModule
 import com.flowos.core.CoreComponent
+import com.flowos.sensors.di.modules.SensorsCacheModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -39,6 +40,7 @@ import javax.inject.Singleton
     FlowOSAppModule::class,
     FlowOSUseCasesModule::class,
     DeviceAdminReceiverModule::class,
+    SensorsCacheModule::class,
   ]
 )
 interface AppComponent : CoreComponent, AndroidInjector<FlowOSApp> {

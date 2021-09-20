@@ -51,7 +51,7 @@ class SplashViewModel @Inject constructor(
           if (isConnected) {
             Completable.complete()
           } else {
-            Completable.error(NoConnectionException)
+            Completable.error(NoConnectionException())
           }
         }
     }

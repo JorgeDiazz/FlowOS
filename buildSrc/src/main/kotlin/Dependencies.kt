@@ -39,6 +39,10 @@ object Versions {
   const val rxJava = "3.0.12"
   const val rxAndroid = "3.0.0"
 
+  const val room = "2.3.0"
+
+  const val jsonSerialization = "1.2.2"
+
   const val moshi = "1.12.0"
   const val multidex = "2.0.1"
 
@@ -96,10 +100,17 @@ object Libraries {
   const val rxJava = "io.reactivex.rxjava3:rxjava:${Versions.rxJava}"
   const val rxAndroid = "io.reactivex.rxjava3:rxandroid:${Versions.rxAndroid}"
 
+  const val room = "androidx.room:room-runtime:${Versions.room}"
+  const val roomExtensions = "androidx.room:room-ktx:${Versions.room}"
+  const val roomRx = "androidx.room:room-rxjava3:${Versions.room}"
+
+  const val jsonSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.jsonSerialization}"
+
   const val moshi = "com.squareup.moshi:moshi-kotlin:${Versions.moshi}"
 
   const val multidex = "androidx.multidex:multidex:${Versions.multidex}"
 
+  const val roomTesting = "androidx.room:room-testing:${Versions.room}"
   const val jUnitExtKtx = "androidx.test.ext:junit-ktx:${Versions.jUnitExtKtx}"
   const val testCoreKtx = "androidx.test:core-ktx:${Versions.testCoreKtx}"
   const val androidXRunner = "androidx.test:runner:${Versions.androidXRunner}"
@@ -145,4 +156,5 @@ object AnnotationProcessors {
   const val dagger = "com.google.dagger:dagger-compiler:${Versions.dagger}"
   const val daggerAndroid = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
   const val moshiCodegen = "com.squareup.moshi:moshi-kotlin-codegen:${Versions.moshi}"
+  const val room = "androidx.room:room-compiler:${Versions.room}"
 }

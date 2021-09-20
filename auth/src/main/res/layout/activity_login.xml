@@ -95,9 +95,21 @@
     android:layout_width="0dp"
     android:layout_height="@dimen/height_button_normal_200"
     android:text="@string/start_shift_button"
-    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/button_exit"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/textField_running_board_id" />
+
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/button_exit"
+    style="@style/PrimaryButton"
+    android:layout_width="0dp"
+    android:layout_height="@dimen/height_button_normal_200"
+    android:backgroundTint="@color/grey_bluish"
+    android:text="@string/exit_app"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/button_continue" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 

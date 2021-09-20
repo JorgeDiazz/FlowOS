@@ -46,6 +46,8 @@ dependencies {
   implementation(Libraries.dagger)
   kapt(AnnotationProcessors.dagger)
 
+  implementation(Libraries.room)
+
   Libraries.suiteTest.forEach { testImplementation(it) }
   testImplementation(project(":core-test"))
 

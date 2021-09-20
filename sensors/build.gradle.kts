@@ -5,6 +5,7 @@ plugins {
   id("plugins.jacoco-report")
   kotlin("android")
   kotlin("kapt")
+  kotlin("plugin.serialization")
 }
 
 android {
@@ -34,6 +35,7 @@ dependencies {
   implementation(project(":base"))
   implementation(project(":components"))
   implementation(project(":core"))
+  implementation(project(":sensors-domain"))
   implementation(project(":sensors-entities"))
 
   implementation(Libraries.constraintLayout)
@@ -51,6 +53,13 @@ dependencies {
   implementation(Libraries.rxJava)
   implementation(Libraries.rxAndroid)
 
+  implementation(Libraries.room)
+  implementation(Libraries.roomExtensions)
+  implementation(Libraries.roomRx)
+  kapt(AnnotationProcessors.room)
+
+  implementation(Libraries.jsonSerialization)
+
   Libraries.suiteTest.forEach { testImplementation(it) }
 
   androidTestImplementation(Libraries.jUnitExtKtx)
@@ -64,11 +73,11 @@ afterEvaluate {
     buildDir,
     "testDebugUnitTest",
     Coverage(
-      instructions = 23.35,
-      lines = 24.86,
-      complexity = 16.95,
-      methods = 23.68,
-      classes = 40.00
+      instructions = 17.78,
+      lines = 16.04,
+      complexity = 14.81,
+      methods = 17.44,
+      classes = 22.22
     ),
     emptyList(),
     emptyList()

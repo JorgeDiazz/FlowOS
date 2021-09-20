@@ -16,7 +16,7 @@ class NetworkConnectivityInterceptor @Inject constructor() : Interceptor {
     } catch (serverException: ServerException) {
       throw serverException
     } catch (_: IOException) {
-      throw NoConnectionException
+      throw NoConnectionException()
     }
   }
 }

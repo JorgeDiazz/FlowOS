@@ -34,6 +34,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.android.AndroidInjection
 import java.util.Calendar
 import javax.inject.Inject
+import kotlin.system.exitProcess
 
 private const val ACCELEROMETER_MEASURES_PROCESSING_INTERVAL_IN_SECONDS = 15
 
@@ -96,6 +97,10 @@ class LoginActivity : AppCompatActivity() {
         val driverId = textFieldDriverId.editText?.text.toString()
         val boardId = textFieldRunningBoardId.editText?.text.toString()
         viewModel.loginUser(driverId, boardId)
+      }
+
+      buttonExit.setOnClickListener {
+        exitProcess(0)
       }
     }
 

@@ -41,7 +41,7 @@ class VerifyInternetConnectivityUseCaseTest {
   @Test
   fun `Should return false when there is an exception performing the test internet call`() {
     // given
-    every { okHttpClient.newCall(any()).execute().close() } throws NoConnectionException
+    every { okHttpClient.newCall(any()).execute().close() } throws NoConnectionException()
 
     // when
     val testObserver = useCase.execute(Unit).test()
