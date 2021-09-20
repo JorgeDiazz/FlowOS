@@ -15,6 +15,7 @@ import com.flowos.base.others.NFC_PAYLOAD_KEY
 import com.flowos.core.BaseViewModel
 import com.flowos.core.Event
 import com.flowos.core.exceptions.NoConnectionException
+import com.flowos.core.qualifiers.GetBleDeviceHashed
 import com.flowos.core.qualifiers.GetIsDeviceInMovement
 import com.flowos.core.qualifiers.GetNfcPayloadFromNfcMeasure
 import com.flowos.core.qualifiers.LongDateToTimestamp
@@ -22,6 +23,7 @@ import com.flowos.core.qualifiers.VerifyInternet
 import com.flowos.sensors.data.NfcMeasure
 import com.flowos.sensors.data.SensorsNews
 import com.flowos.sensors.data.SensorsUiModel
+import com.flowos.sensors.entities.BleUpdateData
 import com.flowos.sensors.entities.DeviceLocationUpdateData
 import com.flowos.sensors.entities.SensorMeasure
 import com.flowos.sensors.qualifiers.CacheDeviceLocationUpdateDataTemporary
@@ -39,7 +41,8 @@ class SensorsViewModel @Inject constructor(
   @GetNfcPayloadFromNfcMeasure private val getPayloadFromNfcMeasureUseCase: UseCase<NfcMeasure, String>,
   @VerifyInternet private val verifyInternetConnectivityUseCase: SingleUseCase<Unit, Boolean>,
   @CacheDeviceLocationUpdateDataTemporary private val cacheDeviceLocationUpdateDataTemporaryUseCase: CompletableUseCase<DeviceLocationUpdateData>,
-  @PublishCachedLocationUpdates private val publishCachedLocationUpdatesUseCase: CompletableUseCase<Unit>
+  @PublishCachedLocationUpdates private val publishCachedLocationUpdatesUseCase: CompletableUseCase<Unit>,
+  @GetBleDeviceHashed private val getBleDeviceHashedUseCase: UseCase<String, String>,
 ) : BaseViewModel() {
 
   private val _liveData = MutableLiveData<SensorsUiModel>()
@@ -50,6 +53,19 @@ class SensorsViewModel @Inject constructor(
 
   fun onViewActive() {
     _liveData.value = SensorsUiModel(vehicleId = getNfcPayloadFromCache())
+  }
+
+  fun onBleUpdate(currentTimestamp: Long, bleDevicesAdded: List<String>, bleDevicesRemoved: List<String>) {
+    val bleDevicesAddedHashed = bleDevicesAdded.map { getBleDeviceHashedUseCase.execute(it) }
+    val bleDevicesRemovedHashed = bleDevicesRemoved.map { getBleDeviceHashedUseCase.execute(it) }
+
+    val bleUpdateData = BleUpdateData(
+      timestamp = longDateToTimestampUseCase.execute(currentTimestamp),
+      added = bleDevicesAddedHashed,
+      removed = bleDevicesRemovedHashed,
+    )
+
+    // TODO: publish BLE updates through Google Pub/Sub topic
   }
 
   fun sendDeviceLocationUpdate(location: Location) {

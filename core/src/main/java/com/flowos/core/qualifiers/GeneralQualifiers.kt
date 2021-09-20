@@ -19,6 +19,9 @@ annotation class GetNfcPayloadFromNfcMeasure
 annotation class GetDeviceId
 
 @Qualifier
+annotation class GetBleDeviceHashed
+
+@Qualifier
 annotation class LoginUser
 
 @Qualifier

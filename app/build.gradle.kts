@@ -211,8 +211,8 @@ afterEvaluate {
     buildDir,
     "testStagingInternalDebugUnitTest",
     Coverage(
-      instructions = 13.41,
-      lines = 14.66,
+      instructions = 13.34,
+      lines = 14.46,
       complexity = 11.72,
       methods = 14.02,
       classes = 18.92

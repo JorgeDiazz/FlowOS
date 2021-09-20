@@ -210,9 +210,15 @@ class SensorsService : Service() {
   }
 
   private fun updateBleDevicesLists() {
+    val currentTimestamp = System.currentTimeMillis() / 1000
+    val bleDevicesAdded = newBleDevices.filterNot { oldBleDevices.contains(it) }
+    val bleDevicesRemoved = oldBleDevices.filterNot { newBleDevices.contains(it) }
+
+    sensorsViewModel.onBleUpdate(currentTimestamp, bleDevicesAdded, bleDevicesRemoved)
+
     logger.d("BLE devices discovered: $newBleDevices")
-    logger.d("BLE devices added: ${newBleDevices.filterNot { oldBleDevices.contains(it) }}")
-    logger.d("BLE devices removed: ${oldBleDevices.filterNot { newBleDevices.contains(it) }}")
+    logger.d("BLE devices added: $bleDevicesAdded")
+    logger.d("BLE devices removed: $bleDevicesRemoved")
 
     oldBleDevices.clear()
     oldBleDevices.addAll(newBleDevices)
