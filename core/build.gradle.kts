@@ -48,6 +48,9 @@ dependencies {
 
   implementation(Libraries.room)
 
+  implementation(Libraries.rxJava)
+  implementation(Libraries.rxAndroid)
+
   Libraries.suiteTest.forEach { testImplementation(it) }
   testImplementation(project(":core-test"))
 

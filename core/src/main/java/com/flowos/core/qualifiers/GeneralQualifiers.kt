@@ -26,3 +26,6 @@ annotation class LoginUser
 
 @Qualifier
 annotation class IsUserLogged
+
+@Qualifier
+annotation class CacheDeviceLogDataTemporary

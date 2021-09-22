@@ -6,6 +6,7 @@ import com.flowos.app.di.modules.ActivityModule
 import com.flowos.app.di.modules.BaseModule
 import com.flowos.app.di.modules.DeviceAdminReceiverModule
 import com.flowos.app.di.modules.FlowOSAppModule
+import com.flowos.app.di.modules.FlowOSLoggerModule
 import com.flowos.app.di.modules.FlowOSUseCasesModule
 import com.flowos.app.di.modules.FragmentModule
 import com.flowos.app.di.modules.IntentsModule
@@ -38,6 +39,7 @@ import javax.inject.Singleton
     LoggerModule::class,
     RepositoriesModule::class,
     FlowOSAppModule::class,
+    FlowOSLoggerModule::class,
     FlowOSUseCasesModule::class,
     DeviceAdminReceiverModule::class,
     SensorsCacheModule::class,

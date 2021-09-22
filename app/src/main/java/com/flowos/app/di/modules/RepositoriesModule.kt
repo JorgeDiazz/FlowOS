@@ -7,7 +7,10 @@ import com.flowos.auth.domain.services.AuthService
 import com.flowos.auth.repositories.CredentialsRepository
 import com.flowos.auth.repositories.CredentialsRepositoryImpl
 import com.flowos.base.interfaces.Cache
+import com.flowos.core.DeviceLogDataRepositoryImpl
 import com.flowos.core.data.CacheImpl
+import com.flowos.core.data.room.DeviceLogDataLocalSource
+import com.flowos.core.interfaces.DeviceLogDataRepository
 import com.flowos.sensors.data.room.DeviceLocationUpdateDataDatabase
 import com.flowos.sensors.data.room.DeviceLocationUpdateDataLocalSource
 import com.flowos.sensors.repositories.DeviceLocationUpdateDataRepositoryImpl
@@ -59,5 +62,21 @@ object RepositoriesModule {
     val dataSource = DeviceLocationUpdateDataLocalSource(dao)
 
     return DeviceLocationUpdateDataRepositoryImpl(dataSource)
+  }
+
+  @Provides
+  @Singleton
+  fun providesDeviceLogDataRepository(
+    context: Context,
+  ): DeviceLogDataRepository {
+    val database =
+      Room.databaseBuilder(context, DeviceLocationUpdateDataDatabase::class.java, "database-device_logs")
+        .fallbackToDestructiveMigration()
+        .build()
+
+    val dao = database.deviceLogDataDao()
+    val dataSource = DeviceLogDataLocalSource(dao)
+
+    return DeviceLogDataRepositoryImpl(dataSource)
   }
 }

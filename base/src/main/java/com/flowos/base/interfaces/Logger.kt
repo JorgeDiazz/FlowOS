@@ -7,4 +7,8 @@ interface Logger {
   fun w(message: String, throwable: Throwable? = null)
   fun e(message: String, throwable: Throwable? = null)
   fun http(url: String, method: String, request: String? = null, response: String? = null, statusCode: Int? = null)
+
+  enum class DeviceLogLevel {
+    ERROR, WARNING
+  }
 }
