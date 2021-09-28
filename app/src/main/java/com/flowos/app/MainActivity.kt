@@ -1,10 +1,18 @@
 package com.flowos.app
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.flowos.app.databinding.ActivityMainBinding
 import com.flowos.base.interfaces.Logger
+import com.flowos.base.others.TURN_SCREEN_INTENT_FILTER
+import com.flowos.base.others.TURN_SCREEN_ON
+import com.flowos.components.utils.turnScreenOn
 import com.flowos.components.utils.viewBinding
 import com.flowos.sensors.HomeFragment
 import dagger.android.AndroidInjection
@@ -22,11 +30,21 @@ class MainActivity : AppCompatActivity() {
 
   private val binding by viewBinding(ActivityMainBinding::inflate)
 
+  private val turnScreenReceiver = object : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+      if (intent.getBooleanExtra(TURN_SCREEN_ON, false)) {
+        turnScreenOn()
+      }
+    }
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     AndroidInjection.inject(this)
 
     super.onCreate(savedInstanceState)
     setContentView(binding.root)
+
+    setUpTurnScreenBroadcast()
 
     loadFragment(HomeFragment.newInstance())
   }
@@ -42,5 +60,13 @@ class MainActivity : AppCompatActivity() {
       }
       commit()
     }
+  }
+
+  private fun setUpTurnScreenBroadcast() {
+    LocalBroadcastManager.getInstance(applicationContext)
+      .registerReceiver(
+        turnScreenReceiver,
+        IntentFilter(TURN_SCREEN_INTENT_FILTER)
+      )
   }
 }

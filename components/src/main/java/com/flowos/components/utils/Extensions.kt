@@ -2,6 +2,8 @@ package com.flowos.components.utils
 
 import android.app.Activity
 import android.app.KeyguardManager
+import android.app.Service
+import android.content.Context.BATTERY_SERVICE
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
@@ -76,7 +78,7 @@ fun Activity.turnScreenOn() {
       }
     )
   } else {
-    this.window.addFlags(
+    window.addFlags(
       WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
         WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
     )
@@ -85,8 +87,13 @@ fun Activity.turnScreenOn() {
   window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 }
 
-fun Activity.isConnectedToPower(): Boolean {
+fun Service.isConnectedToPower(): Boolean {
   val intent = registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
   val plugged = intent?.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1)
   return plugged == BatteryManager.BATTERY_PLUGGED_AC || plugged == BatteryManager.BATTERY_PLUGGED_USB || plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS
+}
+
+fun Service.getBatteryLevel(): Int {
+  return (applicationContext.getSystemService(BATTERY_SERVICE) as BatteryManager)
+    .getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
 }

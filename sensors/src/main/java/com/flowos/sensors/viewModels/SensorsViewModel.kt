@@ -11,6 +11,7 @@ import com.flowos.base.interfaces.Logger
 import com.flowos.base.interfaces.SingleUseCase
 import com.flowos.base.interfaces.UseCase
 import com.flowos.base.others.BOARD_ID_KEY
+import com.flowos.base.others.DRIVER_ID_KEY
 import com.flowos.base.others.NFC_PAYLOAD_KEY
 import com.flowos.core.BaseViewModel
 import com.flowos.core.Event
@@ -25,6 +26,7 @@ import com.flowos.sensors.data.SensorsNews
 import com.flowos.sensors.data.SensorsUiModel
 import com.flowos.sensors.entities.BleUpdateData
 import com.flowos.sensors.entities.DeviceLocationUpdateData
+import com.flowos.sensors.entities.DeviceStateUpdateData
 import com.flowos.sensors.entities.SensorMeasure
 import com.flowos.sensors.qualifiers.CacheDeviceLocationUpdateDataTemporary
 import com.flowos.sensors.qualifiers.PublishCachedLocationUpdates
@@ -172,5 +174,20 @@ class SensorsViewModel @Inject constructor(
   private fun handleError(throwable: Throwable) {
     _news.value = Event(SensorsNews.ShowErrorNews(throwable.message.toString()))
     logger.e("SensorsViewModel handle error", throwable)
+  }
+
+  fun sendDeviceStateUpdate(currentTimestamp: Long, devicePlugged: Boolean, batteryLevel: Int) {
+    val deviceStateUpdateData = DeviceStateUpdateData(
+      longDateToTimestampUseCase.execute(currentTimestamp),
+      cache.readString(BOARD_ID_KEY).orEmpty(),
+      cache.readString(DRIVER_ID_KEY).orEmpty(),
+      cache.readString(NFC_PAYLOAD_KEY).orEmpty(),
+      devicePlugged,
+      batteryLevel,
+    )
+
+    logger.d("deviceStateUpdateData $deviceStateUpdateData")
+
+    // TODO: publish device state updates through Google Pub/Sub topic
   }
 }

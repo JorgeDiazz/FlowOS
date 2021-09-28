@@ -24,13 +24,16 @@ import android.os.Build
 import android.os.IBinder
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.flowos.app.R
 import com.flowos.app.SplashActivity
 import com.flowos.base.interfaces.Logger
 import com.flowos.base.others.FIVE_SECONDS_IN_MILLISECONDS
 import com.flowos.base.others.THIRTY_SECONDS_IN_MILLISECONDS
-import com.flowos.core.EventObserver
+import com.flowos.base.others.TURN_SCREEN_INTENT_FILTER
+import com.flowos.base.others.TURN_SCREEN_ON
+import com.flowos.components.utils.getBatteryLevel
+import com.flowos.components.utils.isConnectedToPower
 import com.flowos.sensors.data.SensorsNews
 import com.flowos.sensors.listeners.MotionSensorListener
 import com.flowos.sensors.viewModels.SensorsViewModel
@@ -39,6 +42,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import javax.inject.Inject
 
 private const val LOCATION_TRIGGER_DISTANCE_IN_METERS: Long = 1
@@ -49,6 +53,8 @@ private val MOTION_SENSORS = arrayOf(Sensor.TYPE_ACCELEROMETER, Sensor.TYPE_LINE
 private const val BLUETOOTH_LOW_ENERGY_SCAN_INTERVAL_IN_SECONDS = THIRTY_SECONDS_IN_MILLISECONDS
 
 private const val FOREGROUND_SENSORS_SERVICE_CHANNEL_ID = "ForegroundSensorsServiceChannel"
+
+private const val ACCELEROMETER_MEASURES_PROCESSING_INTERVAL_IN_SECONDS = 15
 
 /**
  * Represents sensors' work
@@ -74,7 +80,19 @@ class SensorsService : Service() {
 
   private val motionSensorManager by lazy { appContext.getSystemService(Context.SENSOR_SERVICE) as SensorManager }
 
-  private val motionSensorListener = MotionSensorListener { sensorsViewModel.cacheSensorMeasure(it) }
+  private var lastTimeAccelerometerMeasuresProcessed: Long = Calendar.getInstance().time.time
+
+  private val motionSensorListener = MotionSensorListener {
+    sensorsViewModel.cacheSensorMeasure(it)
+
+    val currentTime: Long = Calendar.getInstance().time.time
+    val accelerometerMeasuresIntervalAvailable = isAccelerometerMeasuresIntervalAvailable(currentTime)
+
+    if (accelerometerMeasuresIntervalAvailable && isConnectedToPower()) {
+      lastTimeAccelerometerMeasuresProcessed = currentTime
+      sensorsViewModel.detectMovement(it)
+    }
+  }
 
   private val oldBleDevices = LinkedHashSet<String>()
   private val newBleDevices = LinkedHashSet<String>()
@@ -87,9 +105,19 @@ class SensorsService : Service() {
 
   private val batteryChangedReceiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-      when (intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1)) {
-        BatteryManager.BATTERY_PLUGGED_AC, BatteryManager.BATTERY_PLUGGED_USB, BatteryManager.BATTERY_PLUGGED_WIRELESS -> initializeSensors()
-        else -> unregisterSensorManagers()
+      val currentTimestamp = System.currentTimeMillis() / 1000
+
+      val devicePlugged = when (intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1)) {
+        BatteryManager.BATTERY_PLUGGED_AC, BatteryManager.BATTERY_PLUGGED_USB, BatteryManager.BATTERY_PLUGGED_WIRELESS -> true
+        else -> false
+      }
+
+      sensorsViewModel.sendDeviceStateUpdate(currentTimestamp, devicePlugged, getBatteryLevel())
+
+      if (devicePlugged) {
+        initializeSensors()
+      } else {
+        unregisterSensorManagers()
       }
     }
   }
@@ -104,17 +132,19 @@ class SensorsService : Service() {
     initializeSensors()
   }
 
+  private fun isAccelerometerMeasuresIntervalAvailable(currentTime: Long): Boolean {
+    val elapsedTimeInSeconds = (currentTime - lastTimeAccelerometerMeasuresProcessed) / 1000
+    return elapsedTimeInSeconds > ACCELEROMETER_MEASURES_PROCESSING_INTERVAL_IN_SECONDS
+  }
+
   private fun initializeBatteryChangedReceiver() {
     appContext.registerReceiver(batteryChangedReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
   }
 
   private fun initializeSubscription() {
-    sensorsViewModel.news.observe(
-      ProcessLifecycleOwner.get(),
-      EventObserver {
-        handleNews(it)
-      }
-    )
+    sensorsViewModel.news.observeForever {
+      handleNews(it.peekContent())
+    }
   }
 
   private fun handleNews(news: SensorsNews) {
@@ -130,13 +160,32 @@ class SensorsService : Service() {
         news.errorMessage,
         Toast.LENGTH_LONG
       ).show()
+
+      SensorsNews.NoDeviceMovement -> {
+        logger.d("Sending turnScreenOn broadcast...")
+        sendTurnScreenBroadcast(true)
+      }
     }
   }
 
+  private fun sendTurnScreenBroadcast(turnScreenOn: Boolean) {
+    Intent(TURN_SCREEN_INTENT_FILTER)
+      .putExtra(TURN_SCREEN_ON, turnScreenOn)
+      .also {
+        LocalBroadcastManager.getInstance(appContext).sendBroadcast(it)
+      }
+  }
+
   private fun initializeSensors() {
+    setUpMotionDetector()
     initializeLocationSensor()
     initializeMotionSensors()
     initializeBluetoothLowEnergySensor()
+  }
+
+  private fun setUpMotionDetector() {
+    val accelerometerSensor = motionSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+    motionSensorManager.registerListener(motionSensorListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL)
   }
 
   private fun initializeLocationSensor() {

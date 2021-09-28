@@ -11,3 +11,7 @@ const val DEVICE_ID_KEY = "DEVICE_ID_KEY"
 const val DRIVER_NAME_KEY = "DRIVER_NAME_KEY"
 const val BOARD_ID_KEY = "BOARD_ID_KEY"
 const val NFC_PAYLOAD_KEY = "NFC_PAYLOAD_KEY"
+
+// Broadcast's messages keys
+const val TURN_SCREEN_INTENT_FILTER = "TURN_SCREEN_INTENT_FILTER"
+const val TURN_SCREEN_ON = "TURN_SCREEN"
