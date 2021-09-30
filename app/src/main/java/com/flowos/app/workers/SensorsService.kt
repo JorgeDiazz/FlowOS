@@ -103,6 +103,8 @@ class SensorsService : Service() {
     }
   }
 
+  private var sensorsEnabled = false
+
   private val batteryChangedReceiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
       val currentTimestamp = System.currentTimeMillis() / 1000
@@ -114,9 +116,9 @@ class SensorsService : Service() {
 
       sensorsViewModel.sendDeviceStateUpdate(currentTimestamp, devicePlugged, getBatteryLevel())
 
-      if (devicePlugged) {
+      if (devicePlugged && !sensorsEnabled) {
         initializeSensors()
-      } else {
+      } else if (!devicePlugged) {
         unregisterSensorManagers()
       }
     }
@@ -177,6 +179,8 @@ class SensorsService : Service() {
   }
 
   private fun initializeSensors() {
+    sensorsEnabled = true
+
     setUpMotionDetector()
     initializeLocationSensor()
     initializeMotionSensors()
@@ -253,9 +257,9 @@ class SensorsService : Service() {
 
       updateBleDevicesLists()
       delay(BLUETOOTH_LOW_ENERGY_SCAN_INTERVAL_IN_SECONDS / 2)
-    }
 
-    scheduleBluetoothLowEnergyScanProcess(bleScanner, bleScannerSettings)
+      scheduleBluetoothLowEnergyScanProcess(bleScanner, bleScannerSettings)
+    }
   }
 
   private fun updateBleDevicesLists() {
@@ -275,6 +279,8 @@ class SensorsService : Service() {
   }
 
   private fun unregisterSensorManagers() {
+    sensorsEnabled = false
+
     locationManager.removeUpdates(locationListener)
     motionSensorManager.unregisterListener(motionSensorListener)
   }

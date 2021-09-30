@@ -69,4 +69,8 @@ class MainActivity : AppCompatActivity() {
         IntentFilter(TURN_SCREEN_INTENT_FILTER)
       )
   }
+
+  override fun onBackPressed() {
+    // no-op by default
+  }
 }

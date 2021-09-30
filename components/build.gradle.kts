@@ -22,6 +22,8 @@ android {
 }
 
 dependencies {
+  implementation(project(":base"))
+
   implementation(Libraries.multidex)
 
   implementation(Libraries.kotlinJDK)
