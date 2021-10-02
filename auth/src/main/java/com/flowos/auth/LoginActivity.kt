@@ -119,7 +119,6 @@ class LoginActivity : AppCompatActivity() {
       NfcAdapter.ACTION_TECH_DISCOVERED,
       NfcAdapter.ACTION_NDEF_DISCOVERED -> {
         resolveNfcIntent(intent)
-        hidePlaceInDeviceErrorSnackbar()
       }
     }
   }
@@ -155,6 +154,7 @@ class LoginActivity : AppCompatActivity() {
   private fun observeSensorsData(uiModel: SensorsUiModel) {
     uiModel.nfcPayload?.let {
       sensorsViewModel.cacheNfcPayload(it)
+      hidePlaceInDeviceErrorSnackbar()
 
       Toast.makeText(this, "Vehicle id: $it", Toast.LENGTH_LONG).show()
     }

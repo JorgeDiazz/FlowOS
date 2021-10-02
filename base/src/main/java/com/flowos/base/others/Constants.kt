@@ -4,6 +4,7 @@ package com.flowos.base.others
 const val ONE_SECOND_IN_MILLISECONDS = 1_000L
 const val FIVE_SECONDS_IN_MILLISECONDS = 5_000L
 const val THIRTY_SECONDS_IN_MILLISECONDS = 30_000L
+const val ONE_MINUTE_IN_MILLISECONDS = 60_000L
 
 // cache keys
 const val DRIVER_ID_KEY = "DRIVER_ID_KEY"
@@ -15,3 +16,5 @@ const val NFC_PAYLOAD_KEY = "NFC_PAYLOAD_KEY"
 // Broadcast's messages keys
 const val TURN_SCREEN_INTENT_FILTER = "TURN_SCREEN_INTENT_FILTER"
 const val TURN_SCREEN_ON = "TURN_SCREEN"
+
+const val LOG_OFF_INTENT_FILTER = "LOG_OFF_INTENT_FILTER"

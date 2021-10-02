@@ -9,7 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.flowos.app.databinding.ActivityMainBinding
+import com.flowos.auth.LoginActivity
 import com.flowos.base.interfaces.Logger
+import com.flowos.base.others.LOG_OFF_INTENT_FILTER
 import com.flowos.base.others.TURN_SCREEN_INTENT_FILTER
 import com.flowos.base.others.TURN_SCREEN_ON
 import com.flowos.components.utils.turnScreenOn
@@ -38,6 +40,12 @@ class MainActivity : AppCompatActivity() {
     }
   }
 
+  private val logOffReceiver = object : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+      startLoginActivity()
+    }
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     AndroidInjection.inject(this)
 
@@ -45,6 +53,7 @@ class MainActivity : AppCompatActivity() {
     setContentView(binding.root)
 
     setUpTurnScreenBroadcast()
+    setUpLogOffBroadcast()
 
     loadFragment(HomeFragment.newInstance())
   }
@@ -68,6 +77,20 @@ class MainActivity : AppCompatActivity() {
         turnScreenReceiver,
         IntentFilter(TURN_SCREEN_INTENT_FILTER)
       )
+  }
+
+  private fun setUpLogOffBroadcast() {
+    LocalBroadcastManager.getInstance(applicationContext)
+      .registerReceiver(
+        logOffReceiver,
+        IntentFilter(LOG_OFF_INTENT_FILTER)
+      )
+  }
+
+  private fun startLoginActivity() {
+    val countrySelectionIntent = Intent(this, LoginActivity::class.java)
+    startActivity(countrySelectionIntent)
+    finish()
   }
 
   override fun onBackPressed() {

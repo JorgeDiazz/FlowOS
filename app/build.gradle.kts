@@ -211,10 +211,10 @@ afterEvaluate {
     buildDir,
     "testStagingInternalDebugUnitTest",
     Coverage(
-      instructions = 11.20,
-      lines = 12.34,
-      complexity = 10.27,
-      methods = 13.27,
+      instructions = 10.93,
+      lines = 12.09,
+      complexity = 10.00,
+      methods = 12.93,
       classes = 17.95
     ),
     listOf("**/tmp/kotlin-classes/stagingInternalDebug/**"),

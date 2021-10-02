@@ -29,6 +29,8 @@ import com.flowos.app.R
 import com.flowos.app.SplashActivity
 import com.flowos.base.interfaces.Logger
 import com.flowos.base.others.FIVE_SECONDS_IN_MILLISECONDS
+import com.flowos.base.others.LOG_OFF_INTENT_FILTER
+import com.flowos.base.others.ONE_MINUTE_IN_MILLISECONDS
 import com.flowos.base.others.THIRTY_SECONDS_IN_MILLISECONDS
 import com.flowos.base.others.TURN_SCREEN_INTENT_FILTER
 import com.flowos.base.others.TURN_SCREEN_ON
@@ -40,6 +42,7 @@ import com.flowos.sensors.viewModels.SensorsViewModel
 import dagger.android.AndroidInjection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -103,6 +106,8 @@ class SensorsService : Service() {
     }
   }
 
+  private var logOffJob: Job? = null
+
   private var sensorsEnabled = false
 
   private val batteryChangedReceiver = object : BroadcastReceiver() {
@@ -118,10 +123,25 @@ class SensorsService : Service() {
 
       if (devicePlugged && !sensorsEnabled) {
         initializeSensors()
+        logOffJob?.cancel()
       } else if (!devicePlugged) {
         unregisterSensorManagers()
+        logOffUserAfter(ONE_MINUTE_IN_MILLISECONDS)
       }
     }
+  }
+
+  private fun logOffUserAfter(milliseconds: Long) {
+    logOffJob = CoroutineScope(Dispatchers.Main.immediate).launch {
+      delay(milliseconds)
+      sendLogOffBroadcast()
+    }
+  }
+
+  private fun sendLogOffBroadcast() {
+    LocalBroadcastManager.getInstance(appContext).sendBroadcast(
+      Intent(LOG_OFF_INTENT_FILTER)
+    )
   }
 
   override fun onCreate() {
@@ -171,11 +191,9 @@ class SensorsService : Service() {
   }
 
   private fun sendTurnScreenBroadcast(turnScreenOn: Boolean) {
-    Intent(TURN_SCREEN_INTENT_FILTER)
-      .putExtra(TURN_SCREEN_ON, turnScreenOn)
-      .also {
-        LocalBroadcastManager.getInstance(appContext).sendBroadcast(it)
-      }
+    LocalBroadcastManager.getInstance(appContext).sendBroadcast(
+      Intent(TURN_SCREEN_INTENT_FILTER).putExtra(TURN_SCREEN_ON, turnScreenOn)
+    )
   }
 
   private fun initializeSensors() {
