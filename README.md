@@ -1,69 +1,51 @@
+# Overview: FlowOS (Android app)   
 
-<img src="https://www.celerik.com/wp-content/uploads/2019/12/celerik-1.svg" alt="Celerik"  width="300" height="80"/>
+Welcome FlowOS, an Android application designed for efficient and secure management of bus transportation systems. This solution integrates various sensors and technologies to track bus location, monitor bus motion dynamics, and facilitate passenger count.
 
- [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=celerik_android-kotlin-boilerplate&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=celerik_android-kotlin-boilerplate) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=celerik_android-kotlin-boilerplate&metric=code_smells)](https://sonarcloud.io/dashboard?id=celerik_android-kotlin-boilerplate) [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=celerik_android-kotlin-boilerplate&metric=ncloc)](https://sonarcloud.io/dashboard?id=celerik_android-kotlin-boilerplate)
+This Android app gathers data from NFC cards to identify bus drivers, GPS to locate the bus in the road, accelerometer, linear acceleromenter, and gyroscope to understand how the motion of the bus and BLE (Bluetooth Low Energy) sensor to detect how many passengers are in the bus at a given time.
 
-# Welcome to FlowOS Android App!  
-  
-## Getting Started  
-This project uses Android Kotlin Boilerplate, which it refers to standardized methods, procedures and files that may be used over again for efficiency developing new Android mobile applications.  
-  
-## What's included  
-* An Android app with _modular architecture_ and _MVVM_ architectural pattern.
-* _Splash screen_ with app version and empty _MainActivity_.
-* _Network connectivity interceptor_ for HTTP requests.
-* _Dagger2_ for dependencies injection.
-* _ViewBinding_ for activities and fragments.
-* _Timber_ for logging purposes.
-* Android Studio _EditorConfig_ file to maintain consistent coding styles.
-* Gradle’s Kotlin _DSL_.
-* _SonarQube_ configuration files.
-* _JaCoCo_ maven plugin to generate test coverage reports.
-* _ktlint_ for static code analysis.
-* _LeakCanary_ for memory leaks detection.
-* _Fastlane_ for CI/CD tasks.
-* _SonarCloud_ for static code analysis.
-* _Github_ workflows for automated PR actions and Firebase app distribution.
-* _Azure DevOps Pipelines_ workflows for automated PR actions.
-* _dokka_ for Kotlin's documentation generation.
+Besides, this app takes over the device, locking it when the bus is in movement and unlocking it in no-movement timeframes. Also, the app sets up Kiosk Mode which enables the Android device to only run FlowOS. Other Android features (like dialer, messages or email app, among others) are disabled. 
 
-## Installation  
-Clone this repository and import it into **Android Studio**  
-```bash  
-git clone https://celerik@dev.azure.com/celerik/FlowOS/_git/flowos-app 
-```  
-  
-## Build variants  
-Herein you can find multiple targets that the app takes into account:  
-  
-|          |Staging    |Production  |
-|----------|-----------|------------|  
-|`Internal`|Debug      |Debug       |
-|`External`|Release     |Release    |
-  
- Where the following formed variants are built for staging purposes:  
-- stagingInternalDebug  
-- stagingInternalRelease  
-  
- And these ones for production purposes:  
-- productionInternalDebug  
-- productionInternalRelease  
-- productionExternalDebug  
-- productionExternalRelease  
-  
-**_Sidenote:_**  environments with _Internal_ keyword, for example, could set a specific timeout for debug servers, whereas environments with _External_ keyword could have another timeout according to production servers' features. In the other hand, environments with _Debug_ keyword, could keep a debug logger activated; whereas environments with _Release_ keyword don't.  
-  
-## Debug app signing
-In order to sign your debug app build using _debug-keystore.jks_ keystore, these are the credentials you will have to take in mind:
-   
-`STORE_FILE = ./app/debug-keystore.jks`
 
-`STORE_PASSWORD = android`
+# Features   
 
-`KEY_ALIAS = android_celerik`
+## Data Gathering   
 
-`KEY_PASSWORD = android`
+### a. NFC Card Integration
+The app enables drivers to log in through NFC cards, providing a reliable method for driver identification and authentication.
+
+### b. GPS Tracking
+Utilizing GPS sensor, the app determines the real-time location of the bus on the road, ensuring efficient route management.
+
+### c. Motion Analysis
+The app leverages a combination of accelerometer, linear accelerometer, and gyroscope sensors to gain insights into the motion dynamics of the bus. This information contributes to a deeper understanding of the vehicle's behavior during transit.
+
+### d. Passenger Counting
+Bluetooth Low Energy (BLE) sensor is employed to detect an approximation of the number of passengers on the bus at any given time.
+
+
+## Device Control   
+
+### a. Motion-Driven Device Locking
+To prioritize safety and minimize distractions, the app automatically locks the device when the bus is in motion. This feature ensures the driver's focus remains on the road.
+
+### b. Unlocking in No-Movement Timeframes
+In instances of no movement, the app intelligently unlocks the device, allowing the driver to access necessary information during breaks or when the bus is stationary.
+
+### c. Kiosk Mode Implementation
+The app goes a step further by implementing Kiosk Mode, restricting the Android device to run exclusively on FlowOS. This focused environment eliminates distractions by disabling non-essential features such as the dialer, messaging apps, and email, ensuring optimal operational efficiency.
+
   
+## App Foreground Flow   
+
+<img src="/docs/1st_phase/app_flow.png" alt="app foreground flow">
+
+
+
+## App Background Flow
+
+<img src="/docs/1st_phase/background_tasks _specification.png" alt="app background flow">
+
 ## Others  
 1. Project's CodeStyle can be found [here](docs/codestyle.md).  
 2. Project utilities file can be found [here](docs/utilities.md).
