@@ -1,6 +1,6 @@
 # Overview: FlowOS (Android app)   
 
-Welcome FlowOS, an Android application designed for efficient and secure management of bus transportation systems. This solution integrates various sensors and technologies to track bus location, monitor bus motion dynamics, and facilitate passenger count.
+Welcome to FlowOS, an Android application designed for efficient and secure management of bus transportation systems. This solution integrates various sensors and technologies to track bus location, monitor bus motion dynamics, and facilitate passenger count.
 
 This Android app gathers data from NFC cards to identify bus drivers, GPS to locate the bus in the road, accelerometer, linear acceleromenter, and gyroscope to understand how the motion of the bus and BLE (Bluetooth Low Energy) sensor to detect how many passengers are in the bus at a given time.
 
